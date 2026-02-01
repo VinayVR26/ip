@@ -1,3 +1,7 @@
+/**
+ * This class is used as a blueprint for Task objects
+ * which are used in the TaskHandler.java bot
+ */
 public class Task {
     protected String taskName;
     protected boolean isTaskDone;
