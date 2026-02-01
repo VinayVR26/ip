@@ -28,10 +28,9 @@ public class TaskHandler {
       * Initialises the code and starts interaction with the user
      */
     public static void main(String[] args) {
-        drawHorizontalLine();
+        drawHorizontalLine("top");
         displayWelcomeMessage();
-        drawHorizontalLine();
-        System.out.println();
+        drawHorizontalLine("bottom");
         echoUser();
     }
 
@@ -44,9 +43,10 @@ public class TaskHandler {
     }
 
     /**
-     * Displays a horizontal line
+     *
+     * @param position horizontal line on the top/bottom of each section of text
      */
-    public static void drawHorizontalLine() {
+    public static void drawHorizontalLine(String position) {
         System.out.print("    ");
         for (int i = 0; i < MAX_NUMBER_OF_DASHES; i += 1){
             System.out.print("-");
@@ -54,6 +54,9 @@ public class TaskHandler {
             if (i == MAX_NUMBER_OF_DASHES - 1) {
                 System.out.println();
             }
+        }
+        if (position.equals("bottom")) {
+            System.out.println();
         }
     }
 
@@ -63,7 +66,7 @@ public class TaskHandler {
      * @param taskIndex index of the task in userDataArray to be displayed
      */
     public static void displayContentOfSpecificTask(Task[] userDataArray, int taskIndex) {
-        System.out.print("     " + (taskIndex + 1) + ".");
+        System.out.print("    " + (taskIndex + 1) + ".");
         System.out.print("[" + userDataArray[taskIndex].getTaskStatusSymbol() + "] ");
         System.out.println(userDataArray[taskIndex].taskName);
     }
@@ -74,13 +77,12 @@ public class TaskHandler {
      * @param numberOfItems number of user's tasks
      */
     public static void displayUserDataArray(Task[] userDataArray, int numberOfItems) {
-        drawHorizontalLine();
-        System.out.println("Here are the tasks in your list");
+        drawHorizontalLine("top");
+        System.out.println("    Here are the tasks in your list");
         for (int taskIndex = 0; taskIndex < numberOfItems; taskIndex += 1){
             displayContentOfSpecificTask(userDataArray,  taskIndex);
         }
-        drawHorizontalLine();
-        System.out.println();
+        drawHorizontalLine("bottom");
     }
 
     /**
@@ -100,8 +102,8 @@ public class TaskHandler {
      * @param taskNumber task number as shown when "list" is inputted
      */
     public static void displayMarkedSuccessMessage(Task[] userDataArray, int taskNumber) {
-        System.out.println("Nice! I've marked this task as done:");
-        System.out.println("  [X] " + userDataArray[taskNumber - 1].taskName);
+        System.out.println("    Nice! I've marked this task as done:");
+        System.out.println("      [X] " + userDataArray[taskNumber - 1].taskName);
     }
 
     /**
@@ -110,8 +112,8 @@ public class TaskHandler {
      * @param taskNumber ask number as shown when "list" is inputted
      */
     public static void displayUnmarkedSuccessMessage(Task[] userDataArray, int taskNumber) {
-        System.out.println("OK, I've marked this task as not done yet:");
-        System.out.println("  [ ] " + userDataArray[taskNumber - 1].taskName);
+        System.out.println("    OK, I've marked this task as not done yet:");
+        System.out.println("      [ ] " + userDataArray[taskNumber - 1].taskName);
     }
 
     /**
@@ -135,30 +137,29 @@ public class TaskHandler {
             } else if (userInput.startsWith("mark ")) {
                 int taskNumber = Integer.parseInt(userInput.substring(INDEX_TO_CHECK_TO_GET_TASK_TO_MARK));
                 updateTaskStatus(userDataArray, taskNumber, "mark");
-                drawHorizontalLine();
+                drawHorizontalLine("top");
                 displayMarkedSuccessMessage(userDataArray, taskNumber);
-                drawHorizontalLine();
+                drawHorizontalLine("bottom");
 
             } else if (userInput.startsWith("unmark ")) {
                 int taskNumber = Integer.parseInt(userInput.substring(INDEX_TO_CHECK_TO_GET_TASK_TO_UNMARK));
                 updateTaskStatus(userDataArray, taskNumber, "unmark");
-                drawHorizontalLine();
+                drawHorizontalLine("top");
                 displayUnmarkedSuccessMessage(userDataArray, taskNumber);
-                drawHorizontalLine();
+                drawHorizontalLine("bottom");
 
             } else {
                 Task aTask = new Task(userInput);
                 userDataArray[numberOfItems] = aTask;
                 numberOfItems = numberOfItems + 1;
-                drawHorizontalLine();
+                drawHorizontalLine("top");
                 System.out.println("     added: " + userInput);
-                drawHorizontalLine();
-                System.out.println();
+                drawHorizontalLine("bottom");
             }
         }
-        drawHorizontalLine();
+        drawHorizontalLine("top");
         System.out.println("    I hope I helped you! Bye for now");
-        drawHorizontalLine();
+        drawHorizontalLine("bottom");
     }
 
 }
