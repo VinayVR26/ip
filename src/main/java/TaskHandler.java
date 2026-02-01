@@ -43,7 +43,6 @@ public class TaskHandler {
     }
 
     /**
-     *
      * @param position horizontal line on the top/bottom of each section of text
      */
     public static void drawHorizontalLine(String position) {
@@ -61,7 +60,6 @@ public class TaskHandler {
     }
 
     /**
-     *
      * @param userTaskArray array of Task objects of the user's tasks
      * @param taskIndex index of the task in userTaskArray to be displayed
      */
@@ -72,7 +70,6 @@ public class TaskHandler {
     }
 
     /**
-     *
      * @param userTaskArray array of Task objects of the user's tasks
      * @param numberOfItems number of user's tasks
      */
@@ -86,7 +83,6 @@ public class TaskHandler {
     }
 
     /**
-     *
      * @param userTaskArray array of Task objects of the user's tasks
      * @param taskNumber task number as shown when "list" is inputted
      * @param toDo user input to mark or unmark the task
@@ -97,7 +93,6 @@ public class TaskHandler {
 
 
     /**
-     *
      * @param userTaskArray array of Task objects of the user's tasks
      * @param taskNumber task number as shown when "list" is inputted
      */
@@ -107,7 +102,6 @@ public class TaskHandler {
     }
 
     /**
-     *
      * @param userTaskArray array of Task objects of the user's tasks
      * @param taskNumber ask number as shown when "list" is inputted
      */
