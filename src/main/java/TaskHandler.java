@@ -42,6 +42,16 @@ public class TaskHandler {
         userDataArray[taskNumber - 1].setTaskStatus(toDo.equals("mark"));
     }
 
+    public static void displayMarkedSuccessMessage(Task[] userDataArray, int taskNumber) {
+        System.out.println("Nice! I've marked this task as done:");
+        System.out.println("  [X] " + userDataArray[taskNumber - 1].taskName);
+    }
+
+    public static void displayUnmarkedSuccessMessage(Task[] userDataArray, int taskNumber) {
+        System.out.println("OK, I've marked this task as not done yet:");
+        System.out.println("  [ ] " + userDataArray[taskNumber - 1].taskName);
+    }
+
     public static void echoUser() {
         String userInput;
         Task[] userDataArray = new Task[100];
@@ -58,19 +68,17 @@ public class TaskHandler {
                 displayUserDataArray(userDataArray, numberOfItems);
 
             } else if (userInput.startsWith("mark ")) {
-                int number = Integer.parseInt(userInput.substring(5));
-                updateTaskStatus(userDataArray, number, "mark");
+                int taskNumber = Integer.parseInt(userInput.substring(5));
+                updateTaskStatus(userDataArray, taskNumber, "mark");
                 drawHorizontalLine();
-                System.out.println("Nice! I've marked this task as done:");
-                System.out.println("  [X] " + userDataArray[number - 1].taskName);
+                displayMarkedSuccessMessage(userDataArray, taskNumber);
                 drawHorizontalLine();
 
             } else if (userInput.startsWith("unmark ")) {
-                int number = Integer.parseInt(userInput.substring(7));
-                updateTaskStatus(userDataArray, number, "unmark");
+                int taskNumber = Integer.parseInt(userInput.substring(7));
+                updateTaskStatus(userDataArray, taskNumber, "unmark");
                 drawHorizontalLine();
-                System.out.println("OK, I've marked this task as not done yet:");
-                System.out.println("  [ ] " + userDataArray[number - 1].taskName);
+                displayUnmarkedSuccessMessage(userDataArray, taskNumber);
                 drawHorizontalLine();
 
             } else {
