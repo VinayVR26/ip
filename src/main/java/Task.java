@@ -15,11 +15,6 @@ public class Task {
         this.isTaskDone = status;
     }
 
-    /*public char getTaskStatusSymbol() {
-        if (isTaskDone) { return 'X'; }
-        return ' ';
-    }*/
-
     public String toString() {
         if (isTaskDone) {
             return "[X] " + taskDescription;

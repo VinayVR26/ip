@@ -57,12 +57,20 @@ public class TaskHandler {
         echoUser();
     }
 
+    private static void addIndentation(int spacingCount) {
+        for (int i = 0; i < spacingCount; i++) {
+            System.out.print(" ");
+        }
+    }
+
     /**
      * Displays the welcome message to the user
      */
     public static void displayWelcomeMessage() {
-        System.out.println("    Hello! I'm TaskHandler");
-        System.out.println("    Tell me what to do. I am happy to assist you.\n");
+        addIndentation(4);
+        System.out.println("Hello! I'm TaskHandler");
+        addIndentation(4);
+        System.out.println("Tell me what to do. I am happy to assist you.\n");
     }
 
     /**
@@ -87,8 +95,9 @@ public class TaskHandler {
      * @param taskIndex index of the task in userTaskArray to be displayed
      */
     public static void displayContentOfSpecificTask(Task[] userTaskArray, int taskIndex) {
-        System.out.print("    " + (taskIndex + 1) + ".");
-        System.out.print(userTaskArray[taskIndex]);
+        addIndentation(5);
+        System.out.print((taskIndex + 1) + ".");
+        System.out.println(userTaskArray[taskIndex]);
     }
 
     /**
@@ -97,7 +106,8 @@ public class TaskHandler {
      */
     public static void displayUserDataArray(Task[] userTaskArray, int numberOfItems) {
         drawHorizontalLine("top");
-        System.out.println("    Here are the tasks in your list");
+        addIndentation(5);
+        System.out.println("Here are the tasks in your list");
         for (int taskIndex = 0; taskIndex < numberOfItems; taskIndex += 1){
             displayContentOfSpecificTask(userTaskArray,  taskIndex);
         }
@@ -119,8 +129,10 @@ public class TaskHandler {
      * @param taskNumber task number as shown when "list" is inputted
      */
     public static void displayMarkedSuccessMessage(Task[] userTaskArray, int taskNumber) {
-        System.out.println("    Nice! I've marked this task as done:");
-        System.out.println("      [X] " + userTaskArray[taskNumber - 1].taskDescription);
+        addIndentation(5);
+        System.out.println("Nice! I've marked this task as done:");
+        addIndentation(7);
+        System.out.println("[X] " + userTaskArray[taskNumber - 1].taskDescription);
     }
 
     /**
@@ -128,8 +140,10 @@ public class TaskHandler {
      * @param taskNumber ask number as shown when "list" is inputted
      */
     public static void displayUnmarkedSuccessMessage(Task[] userTaskArray, int taskNumber) {
-        System.out.println("    OK, I've marked this task as not done yet:");
-        System.out.println("      [ ] " + userTaskArray[taskNumber - 1].taskDescription);
+        addIndentation(5);
+        System.out.println("OK, I've marked this task as not done yet:");
+        addIndentation(7);
+        System.out.println("[ ] " + userTaskArray[taskNumber - 1].taskDescription);
     }
 
     public static Todo getTodoInstance(String userInput) {
@@ -145,7 +159,7 @@ public class TaskHandler {
         int eventFromTimeEndIndex = userInput.indexOf(" /to");
         String eventTaskFromTime = userInput.substring(eventFromTimeStartIndex, eventFromTimeEndIndex);
 
-        int eventToTimeStartIndex = userInput.indexOf(" /to") + ("/to").length();
+        int eventToTimeStartIndex = userInput.indexOf("/to") + ("/to").length();
         String eventTaskToTime = userInput.substring(eventToTimeStartIndex);
 
         return new Event(eventTaskDescription, eventTaskFromTime, eventTaskToTime);
@@ -162,6 +176,15 @@ public class TaskHandler {
         return new Deadline(deadlineTaskDescription, deadlineDate);
     }
 
+    public static void displayTaskAddedMessage(Task taskInstance, int taskNumber) {
+        addIndentation(5);
+        System.out.println("Got it. I've added this task:");
+        addIndentation(7);
+        System.out.println(taskInstance);
+        addIndentation(5);
+        System.out.println("Now you have " + (taskNumber + 1) + " tasks in the list.");
+    }
+
     public static void determineTaskTypeAndDisplay(Task[] userTaskArray, String userInput, int taskNumber) {
         if (userInput.startsWith("todo")) {
             Todo todoTask = getTodoInstance(userInput);
@@ -175,6 +198,8 @@ public class TaskHandler {
             Deadline deadlineTask = getDeadlineInstance(userInput);
             userTaskArray[taskNumber] = deadlineTask;
         }
+
+        displayTaskAddedMessage(userTaskArray[taskNumber], taskNumber);
     }
 
     /**
@@ -221,7 +246,8 @@ public class TaskHandler {
             }
         }
         drawHorizontalLine("top");
-        System.out.println("    I hope I helped you! Bye for now");
+        addIndentation(5);
+        System.out.println("I hope I helped you! Bye for now");
         drawHorizontalLine("bottom");
     }
 }
