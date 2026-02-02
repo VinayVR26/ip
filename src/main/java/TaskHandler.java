@@ -24,6 +24,21 @@ public class TaskHandler {
     private static final int INDEX_TO_CHECK_TO_GET_TASK_NUMBER_TO_UNMARK = 7;
 
     /**
+     * Starting index position of description of a Todo task
+     */
+    private static final int STARTING_INDEX_OF_TODO_TASK_DESCRIPTION = 5;
+
+    /**
+     * Starting index position of description of a Event task
+     */
+    private static final int STARTING_INDEX_OF_EVENT_TASK_DESCRIPTION = 6;
+
+    /**
+     * Starting index position of description of a Deadline task
+     */
+    private static final int STARTING_INDEX_OF_DEADLINE_TASK_DESCRIPTION = 9;
+
+    /**
       * Main entry point of the code
       * Initialises the code and starts interaction with the user
      */
@@ -65,8 +80,7 @@ public class TaskHandler {
      */
     public static void displayContentOfSpecificTask(Task[] userTaskArray, int taskIndex) {
         System.out.print("    " + (taskIndex + 1) + ".");
-        System.out.print("[" + userTaskArray[taskIndex].getTaskStatusSymbol() + "] ");
-        System.out.println(userTaskArray[taskIndex].taskDescription);
+        System.out.print(userTaskArray[taskIndex]);
     }
 
     /**
@@ -110,6 +124,39 @@ public class TaskHandler {
         System.out.println("      [ ] " + userTaskArray[taskNumber - 1].taskDescription);
     }
 
+    public static void determineTaskTypeAndDisplay(Task[] userTaskArray, String userInput, int taskNumber) {
+        if (userInput.startsWith("todo")) {
+            Todo todoTask = new Todo(userInput.substring(STARTING_INDEX_OF_TODO_TASK_DESCRIPTION));
+            userTaskArray[taskNumber] = todoTask;
+
+        } else if (userInput.startsWith("event")) {
+            int endIndexOfEventDescription = userInput.indexOf(" /from");
+            String eventTaskDescription = userInput.substring(STARTING_INDEX_OF_EVENT_TASK_DESCRIPTION,
+                    endIndexOfEventDescription);
+
+            int eventFromTimeStartIndex = userInput.indexOf("/from") + ("/from").length();
+            int eventFromTimeEndIndex = userInput.indexOf(" /to");
+            String eventTaskFromTime = userInput.substring(eventFromTimeStartIndex, eventFromTimeEndIndex);
+
+            int eventToTimeStartIndex = userInput.indexOf(" /to") + ("/to").length();
+            String eventTaskToTime = userInput.substring(eventToTimeStartIndex);
+
+            Event eventTask = new Event(eventTaskDescription, eventTaskFromTime, eventTaskToTime);
+            userTaskArray[taskNumber] = eventTask;
+
+        } else {
+            int endIndexOfDeadlineDescription = userInput.indexOf(" /by");
+            String deadlineTaskDescription = userInput.substring(STARTING_INDEX_OF_DEADLINE_TASK_DESCRIPTION,
+                    endIndexOfDeadlineDescription);
+
+            int deadlineDateIndex = userInput.indexOf("/by") + ("/by").length();
+            String deadlineDate = userInput.substring(deadlineDateIndex);
+
+            Deadline deadlineTask = new Deadline(deadlineTaskDescription, deadlineDate);
+            userTaskArray[taskNumber] = deadlineTask;
+        }
+    }
+
     /**
      * logic of the task bot to handle user input
      */
@@ -143,11 +190,13 @@ public class TaskHandler {
                 drawHorizontalLine("bottom");
 
             } else {
-                Task aTask = new Task(userInput);
+                /*Task aTask = new Task(userInput);
                 userTaskArray[numberOfTasks] = aTask;
-                numberOfTasks = numberOfTasks + 1;
+                numberOfTasks = numberOfTasks + 1;*/
                 drawHorizontalLine("top");
-                System.out.println("     added: " + userInput);
+                determineTaskTypeAndDisplay(userTaskArray, userInput, numberOfTasks);
+                numberOfTasks = numberOfTasks + 1;
+                //System.out.println("     Got it. I've added this task: " + userInput);
                 drawHorizontalLine("bottom");
             }
         }
