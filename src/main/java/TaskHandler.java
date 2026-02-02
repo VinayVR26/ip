@@ -2,54 +2,25 @@ import java.util.Scanner;
 
 public class TaskHandler {
 
-    /**
-     * The maximum number of tasks
-     */
     private static final int MAX_NUMBER_OF_TASKS = 100;
-
-    /**
-     * The number of horizontal dashes in each horizontal line
-     */
     private static final int MAX_NUMBER_OF_DASHES = 60;
+    private static final int NUMBER_OF_SPACES_TO_INDENT_HORIZONTAL_LINE = 4;
+    private static final int NUMBER_OF_SPACES_TO_INDENT_WELCOME_MESSAGE = 5;
+    private static final int NUMBER_OF_SPACES_TO_INDENT_TASK_ADDED_SUCCESS_MESSAGE = 5;
+    private static final int NUMBER_OF_SPACES_TO_INDENT_ADDED_TASK_DESCRIPTION= 7;
+    private static final int NUMBER_OF_SPACES_TO_INDENT_TASK_MARKED_SUCCESS_MESSAGE = 5;
+    private static final int NUMBER_OF_SPACES_TO_INDENT_MARKED_TASK_DESCRIPTION= 7;
+    private static final int NUMBER_OF_SPACES_TO_INDENT_TASK_UNMARKED_SUCCESS_MESSAGE = 5;
+    private static final int NUMBER_OF_SPACES_TO_INDENT_UNMARKED_TASK_DESCRIPTION = 7;
+    private static final int NUMBER_OF_SPACES_TO_INDENT_BYE_MESSAGE = 5;
+    private static final int NUMBER_OF_SPACES_TO_INDENT_EACH_TASK_ADDED = 5;
 
-
-    /**
-     * The index position to start traversing to get the task number to mark
-     */
     private static final int INDEX_TO_CHECK_TO_GET_TASK_NUMBER_TO_MARK = 5;
-
-    /**
-     * The index position to start traversing to get the task number to unmark
-     */
     private static final int INDEX_TO_CHECK_TO_GET_TASK_NUMBER_TO_UNMARK = 7;
-
-    /**
-     * Starting index position of description of a Todo task
-     */
     private static final int STARTING_INDEX_OF_TODO_TASK_DESCRIPTION = 5;
-
-    /**
-     * Starting index position of description of an Event task
-     */
     private static final int STARTING_INDEX_OF_EVENT_TASK_DESCRIPTION = 6;
-
-    /**
-     * Number of components in an Event task which are
-     * 1) Task description
-     * 2) From Time
-     * 3) End Time
-     */
-    private static final int NUMBER_OF_COMPONENTS_IN_EVENT_TASK = 3;
-
-    /**
-     * Starting index position of description of a Deadline task
-     */
     private static final int STARTING_INDEX_OF_DEADLINE_TASK_DESCRIPTION = 9;
 
-    /**
-      * Main entry point of the code
-      * Initialises the code and starts interaction with the user
-     */
     public static void main(String[] args) {
         drawHorizontalLine("top");
         displayWelcomeMessage();
@@ -63,24 +34,17 @@ public class TaskHandler {
         }
     }
 
-    /**
-     * Displays the welcome message to the user
-     */
     public static void displayWelcomeMessage() {
-        addIndentation(4);
+        addIndentation(NUMBER_OF_SPACES_TO_INDENT_WELCOME_MESSAGE);
         System.out.println("Hello! I'm TaskHandler");
-        addIndentation(4);
-        System.out.println("Tell me what to do. I am happy to assist you.\n");
+        addIndentation(NUMBER_OF_SPACES_TO_INDENT_WELCOME_MESSAGE);
+        System.out.println("Tell me what to do. I am happy to assist you.");
     }
 
-    /**
-     * @param position horizontal line on the top/bottom of each section of text
-     */
     public static void drawHorizontalLine(String position) {
-        System.out.print("    ");
+        addIndentation(NUMBER_OF_SPACES_TO_INDENT_HORIZONTAL_LINE);
         for (int i = 0; i < MAX_NUMBER_OF_DASHES; i += 1){
             System.out.print("-");
-
             if (i == MAX_NUMBER_OF_DASHES - 1) {
                 System.out.println();
             }
@@ -90,59 +54,37 @@ public class TaskHandler {
         }
     }
 
-    /**
-     * @param userTaskArray array of Task objects of the user's tasks
-     * @param taskIndex index of the task in userTaskArray to be displayed
-     */
     public static void displayContentOfSpecificTask(Task[] userTaskArray, int taskIndex) {
-        addIndentation(5);
+        addIndentation(NUMBER_OF_SPACES_TO_INDENT_EACH_TASK_ADDED);
         System.out.print((taskIndex + 1) + ".");
         System.out.println(userTaskArray[taskIndex]);
     }
 
-    /**
-     * @param userTaskArray array of Task objects of the user's tasks
-     * @param numberOfItems number of user's tasks
-     */
-    public static void displayUserDataArray(Task[] userTaskArray, int numberOfItems) {
+    public static void displayUserDataArray(Task[] userTaskArray, int numberOfTasks) {
         drawHorizontalLine("top");
-        addIndentation(5);
+        addIndentation(NUMBER_OF_SPACES_TO_INDENT_EACH_TASK_ADDED);
         System.out.println("Here are the tasks in your list");
-        for (int taskIndex = 0; taskIndex < numberOfItems; taskIndex += 1){
+        for (int taskIndex = 0; taskIndex < numberOfTasks; taskIndex += 1){
             displayContentOfSpecificTask(userTaskArray,  taskIndex);
         }
         drawHorizontalLine("bottom");
     }
 
-    /**
-     * @param userTaskArray array of Task objects of the user's tasks
-     * @param taskNumber task number as shown when "list" is inputted
-     * @param toDo user input to mark or unmark the task
-     */
     public static void updateTaskStatus(Task[] userTaskArray, int taskNumber, String toDo) {
         userTaskArray[taskNumber - 1].setTaskStatus(toDo.equals("mark"));
     }
 
-
-    /**
-     * @param userTaskArray array of Task objects of the user's tasks
-     * @param taskNumber task number as shown when "list" is inputted
-     */
     public static void displayMarkedSuccessMessage(Task[] userTaskArray, int taskNumber) {
-        addIndentation(5);
+        addIndentation(NUMBER_OF_SPACES_TO_INDENT_TASK_MARKED_SUCCESS_MESSAGE);
         System.out.println("Nice! I've marked this task as done:");
-        addIndentation(7);
+        addIndentation(NUMBER_OF_SPACES_TO_INDENT_MARKED_TASK_DESCRIPTION);
         System.out.println("[X] " + userTaskArray[taskNumber - 1].taskDescription);
     }
 
-    /**
-     * @param userTaskArray array of Task objects of the user's tasks
-     * @param taskNumber ask number as shown when "list" is inputted
-     */
     public static void displayUnmarkedSuccessMessage(Task[] userTaskArray, int taskNumber) {
-        addIndentation(5);
+        addIndentation(NUMBER_OF_SPACES_TO_INDENT_TASK_UNMARKED_SUCCESS_MESSAGE);
         System.out.println("OK, I've marked this task as not done yet:");
-        addIndentation(7);
+        addIndentation(NUMBER_OF_SPACES_TO_INDENT_UNMARKED_TASK_DESCRIPTION);
         System.out.println("[ ] " + userTaskArray[taskNumber - 1].taskDescription);
     }
 
@@ -176,35 +118,31 @@ public class TaskHandler {
         return new Deadline(deadlineTaskDescription, deadlineDate);
     }
 
-    public static void displayTaskAddedMessage(Task taskInstance, int taskNumber) {
-        addIndentation(5);
+    public static void displayTaskAddedMessage(Task taskObject, int taskIndex) {
+        addIndentation(NUMBER_OF_SPACES_TO_INDENT_TASK_ADDED_SUCCESS_MESSAGE);
         System.out.println("Got it. I've added this task:");
-        addIndentation(7);
-        System.out.println(taskInstance);
-        addIndentation(5);
-        System.out.println("Now you have " + (taskNumber + 1) + " tasks in the list.");
+        addIndentation(NUMBER_OF_SPACES_TO_INDENT_ADDED_TASK_DESCRIPTION);
+        System.out.println(taskObject);
+        addIndentation(NUMBER_OF_SPACES_TO_INDENT_TASK_ADDED_SUCCESS_MESSAGE);
+        System.out.println("Now you have " + (taskIndex + 1) + " tasks in the list.");
     }
 
-    public static void determineTaskTypeAndDisplay(Task[] userTaskArray, String userInput, int taskNumber) {
+    public static void determineTaskTypeAndDisplay(Task[] userTaskArray, String userInput, int taskIndex) {
         if (userInput.startsWith("todo")) {
             Todo todoTask = getTodoInstance(userInput);
-            userTaskArray[taskNumber] = todoTask;
+            userTaskArray[taskIndex] = todoTask;
 
         } else if (userInput.startsWith("event")) {
             Event eventTask = getEventInstance(userInput);
-            userTaskArray[taskNumber] = eventTask;
+            userTaskArray[taskIndex] = eventTask;
 
         } else {
             Deadline deadlineTask = getDeadlineInstance(userInput);
-            userTaskArray[taskNumber] = deadlineTask;
+            userTaskArray[taskIndex] = deadlineTask;
         }
-
-        displayTaskAddedMessage(userTaskArray[taskNumber], taskNumber);
+        displayTaskAddedMessage(userTaskArray[taskIndex], taskIndex);
     }
 
-    /**
-     * Main logic of the task bot to handle user input.
-     */
     public static void echoUser() {
         String userInput;
         Task[] userTaskArray = new Task[MAX_NUMBER_OF_TASKS];
@@ -235,18 +173,14 @@ public class TaskHandler {
                 drawHorizontalLine("bottom");
 
             } else {
-                /*Task aTask = new Task(userInput);
-                userTaskArray[numberOfTasks] = aTask;
-                numberOfTasks = numberOfTasks + 1;*/
                 drawHorizontalLine("top");
                 determineTaskTypeAndDisplay(userTaskArray, userInput, numberOfTasks);
                 numberOfTasks = numberOfTasks + 1;
-                //System.out.println("     Got it. I've added this task: " + userInput);
                 drawHorizontalLine("bottom");
             }
         }
         drawHorizontalLine("top");
-        addIndentation(5);
+        addIndentation(NUMBER_OF_SPACES_TO_INDENT_BYE_MESSAGE);
         System.out.println("I hope I helped you! Bye for now");
         drawHorizontalLine("bottom");
     }
