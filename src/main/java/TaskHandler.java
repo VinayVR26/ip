@@ -133,8 +133,6 @@ public class TaskHandler {
     }
 
     public static Event getEventInstance(String userInput) {
-        String[] eventTaskArray = new String[NUMBER_OF_COMPONENTS_IN_EVENT_TASK];
-
         int endIndexOfEventDescription = userInput.indexOf(" /from");
         String eventTaskDescription = userInput.substring(STARTING_INDEX_OF_EVENT_TASK_DESCRIPTION,
                 endIndexOfEventDescription);
@@ -149,9 +147,20 @@ public class TaskHandler {
         return new Event(eventTaskDescription, eventTaskFromTime, eventTaskToTime);
     }
 
+    public static Deadline getDeadlineInstance(String userInput) {
+        int endIndexOfDeadlineDescription = userInput.indexOf(" /by");
+        String deadlineTaskDescription = userInput.substring(STARTING_INDEX_OF_DEADLINE_TASK_DESCRIPTION,
+                endIndexOfDeadlineDescription);
+
+        int deadlineDateIndex = userInput.indexOf("/by") + ("/by").length();
+        String deadlineDate = userInput.substring(deadlineDateIndex);
+
+        return new Deadline(deadlineTaskDescription, deadlineDate);
+    }
+
     public static void determineTaskTypeAndDisplay(Task[] userTaskArray, String userInput, int taskNumber) {
         if (userInput.startsWith("todo")) {
-            Todo todoTask = new Todo(userInput.substring(STARTING_INDEX_OF_TODO_TASK_DESCRIPTION));
+            Todo todoTask = getTodoInstance(userInput);
             userTaskArray[taskNumber] = todoTask;
 
         } else if (userInput.startsWith("event")) {
@@ -159,20 +168,13 @@ public class TaskHandler {
             userTaskArray[taskNumber] = eventTask;
 
         } else {
-            int endIndexOfDeadlineDescription = userInput.indexOf(" /by");
-            String deadlineTaskDescription = userInput.substring(STARTING_INDEX_OF_DEADLINE_TASK_DESCRIPTION,
-                    endIndexOfDeadlineDescription);
-
-            int deadlineDateIndex = userInput.indexOf("/by") + ("/by").length();
-            String deadlineDate = userInput.substring(deadlineDateIndex);
-
-            Deadline deadlineTask = new Deadline(deadlineTaskDescription, deadlineDate);
+            Deadline deadlineTask = getDeadlineInstance(userInput);
             userTaskArray[taskNumber] = deadlineTask;
         }
     }
 
     /**
-     * logic of the task bot to handle user input
+     * Main logic of the task bot to handle user input.
      */
     public static void echoUser() {
         String userInput;
