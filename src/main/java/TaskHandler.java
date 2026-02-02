@@ -29,9 +29,17 @@ public class TaskHandler {
     private static final int STARTING_INDEX_OF_TODO_TASK_DESCRIPTION = 5;
 
     /**
-     * Starting index position of description of a Event task
+     * Starting index position of description of an Event task
      */
     private static final int STARTING_INDEX_OF_EVENT_TASK_DESCRIPTION = 6;
+
+    /**
+     * Number of components in an Event task which are
+     * 1) Task description
+     * 2) From Time
+     * 3) End Time
+     */
+    private static final int NUMBER_OF_COMPONENTS_IN_EVENT_TASK = 3;
 
     /**
      * Starting index position of description of a Deadline task
@@ -124,24 +132,30 @@ public class TaskHandler {
         System.out.println("      [ ] " + userTaskArray[taskNumber - 1].taskDescription);
     }
 
+    public static Event getEventInstance(String userInput) {
+        String[] eventTaskArray = new String[NUMBER_OF_COMPONENTS_IN_EVENT_TASK];
+
+        int endIndexOfEventDescription = userInput.indexOf(" /from");
+        String eventTaskDescription = userInput.substring(STARTING_INDEX_OF_EVENT_TASK_DESCRIPTION,
+                endIndexOfEventDescription);
+
+        int eventFromTimeStartIndex = userInput.indexOf("/from") + ("/from").length();
+        int eventFromTimeEndIndex = userInput.indexOf(" /to");
+        String eventTaskFromTime = userInput.substring(eventFromTimeStartIndex, eventFromTimeEndIndex);
+
+        int eventToTimeStartIndex = userInput.indexOf(" /to") + ("/to").length();
+        String eventTaskToTime = userInput.substring(eventToTimeStartIndex);
+
+        return new Event(eventTaskDescription, eventTaskFromTime, eventTaskToTime);
+    }
+
     public static void determineTaskTypeAndDisplay(Task[] userTaskArray, String userInput, int taskNumber) {
         if (userInput.startsWith("todo")) {
             Todo todoTask = new Todo(userInput.substring(STARTING_INDEX_OF_TODO_TASK_DESCRIPTION));
             userTaskArray[taskNumber] = todoTask;
 
         } else if (userInput.startsWith("event")) {
-            int endIndexOfEventDescription = userInput.indexOf(" /from");
-            String eventTaskDescription = userInput.substring(STARTING_INDEX_OF_EVENT_TASK_DESCRIPTION,
-                    endIndexOfEventDescription);
-
-            int eventFromTimeStartIndex = userInput.indexOf("/from") + ("/from").length();
-            int eventFromTimeEndIndex = userInput.indexOf(" /to");
-            String eventTaskFromTime = userInput.substring(eventFromTimeStartIndex, eventFromTimeEndIndex);
-
-            int eventToTimeStartIndex = userInput.indexOf(" /to") + ("/to").length();
-            String eventTaskToTime = userInput.substring(eventToTimeStartIndex);
-
-            Event eventTask = new Event(eventTaskDescription, eventTaskFromTime, eventTaskToTime);
+            Event eventTask = getEventInstance(userInput);
             userTaskArray[taskNumber] = eventTask;
 
         } else {
