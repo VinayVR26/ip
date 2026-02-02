@@ -24,6 +24,6 @@ public class Task {
         if (isTaskDone) {
             return "[X] " + taskDescription;
         }
-        return "[ ]" + taskDescription;
+        return "[ ] " + taskDescription;
     }
 }
