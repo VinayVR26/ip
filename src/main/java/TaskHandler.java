@@ -132,6 +132,10 @@ public class TaskHandler {
         System.out.println("      [ ] " + userTaskArray[taskNumber - 1].taskDescription);
     }
 
+    public static Todo getTodoInstance(String userInput) {
+        return new Todo(userInput.substring(STARTING_INDEX_OF_TODO_TASK_DESCRIPTION));
+    }
+
     public static Event getEventInstance(String userInput) {
         int endIndexOfEventDescription = userInput.indexOf(" /from");
         String eventTaskDescription = userInput.substring(STARTING_INDEX_OF_EVENT_TASK_DESCRIPTION,
