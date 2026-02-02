@@ -66,7 +66,7 @@ public class TaskHandler {
     public static void displayContentOfSpecificTask(Task[] userTaskArray, int taskIndex) {
         System.out.print("    " + (taskIndex + 1) + ".");
         System.out.print("[" + userTaskArray[taskIndex].getTaskStatusSymbol() + "] ");
-        System.out.println(userTaskArray[taskIndex].taskName);
+        System.out.println(userTaskArray[taskIndex].taskDescription);
     }
 
     /**
@@ -98,7 +98,7 @@ public class TaskHandler {
      */
     public static void displayMarkedSuccessMessage(Task[] userTaskArray, int taskNumber) {
         System.out.println("    Nice! I've marked this task as done:");
-        System.out.println("      [X] " + userTaskArray[taskNumber - 1].taskName);
+        System.out.println("      [X] " + userTaskArray[taskNumber - 1].taskDescription);
     }
 
     /**
@@ -107,7 +107,7 @@ public class TaskHandler {
      */
     public static void displayUnmarkedSuccessMessage(Task[] userTaskArray, int taskNumber) {
         System.out.println("    OK, I've marked this task as not done yet:");
-        System.out.println("      [ ] " + userTaskArray[taskNumber - 1].taskName);
+        System.out.println("      [ ] " + userTaskArray[taskNumber - 1].taskDescription);
     }
 
     /**
