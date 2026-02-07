@@ -96,12 +96,23 @@ public class TaskHandler {
         return new Todo(userInput.substring(STARTING_INDEX_OF_TODO_TASK_DESCRIPTION));
     }
 
-    public static Event getEventInstance(String userInput) {
+    public static Event getEventInstance(String userInput) throws TaskHandlerException{
+        if (userInput.trim().length() < STARTING_INDEX_OF_EVENT_TASK_DESCRIPTION) {
+            throw new TaskHandlerException("ERROR: Description, /from and /to timings of an 'event' cannot be empty");
+        }
+
+        if (!userInput.contains(" /from")) {
+            throw new TaskHandlerException("ERROR: No '/from' time specified for an 'event' task");
+        }
         int endIndexOfEventDescription = userInput.indexOf(" /from");
         String eventTaskDescription = userInput.substring(STARTING_INDEX_OF_EVENT_TASK_DESCRIPTION,
                 endIndexOfEventDescription);
 
         int eventFromTimeStartIndex = userInput.indexOf("/from") + ("/from").length();
+
+        if (!userInput.contains(" /to")) {
+            throw new TaskHandlerException("ERROR: No '/to' time specified for an 'event' task");
+        }
         int eventFromTimeEndIndex = userInput.indexOf(" /to");
         String eventTaskFromTime = userInput.substring(eventFromTimeStartIndex, eventFromTimeEndIndex);
 
