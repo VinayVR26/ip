@@ -22,10 +22,14 @@ public class TaskHandler {
     private static final int STARTING_INDEX_OF_EVENT_TASK_DESCRIPTION = 6;
     private static final int STARTING_INDEX_OF_DEADLINE_TASK_DESCRIPTION = 9;
 
+    public enum LineLocation {
+        TOP, BOTTOM;
+    }
+
     public static void main(String[] args) {
-        drawHorizontalLine("top");
+        drawHorizontalLine(LineLocation.TOP);
         displayWelcomeMessage();
-        drawHorizontalLine("bottom");
+        drawHorizontalLine(LineLocation.BOTTOM);
         echoUser();
     }
 
@@ -42,7 +46,7 @@ public class TaskHandler {
         System.out.println("Tell me what to do. I am happy to assist you.");
     }
 
-    public static void drawHorizontalLine(String position) {
+    public static void drawHorizontalLine(LineLocation position) {
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_HORIZONTAL_LINE);
         for (int i = 0; i < MAX_NUMBER_OF_DASHES; i += 1){
             System.out.print("-");
@@ -50,7 +54,7 @@ public class TaskHandler {
                 System.out.println();
             }
         }
-        if (position.equals("bottom")) {
+        if (position == LineLocation.BOTTOM) {
             System.out.println();
         }
     }
@@ -62,13 +66,13 @@ public class TaskHandler {
     }
 
     public static void displayUserDataArray(Task[] userTaskArray, int numberOfTasks) {
-        drawHorizontalLine("top");
+        drawHorizontalLine(LineLocation.TOP);
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_EACH_TASK_ADDED);
         System.out.println("Here are the tasks in your list");
         for (int taskIndex = 0; taskIndex < numberOfTasks; taskIndex += 1){
             displayContentOfSpecificTask(userTaskArray,  taskIndex);
         }
-        drawHorizontalLine("bottom");
+        drawHorizontalLine(LineLocation.BOTTOM);
     }
 
     public static void updateTaskStatus(Task[] userTaskArray, int taskNumber, String toDo) {
@@ -96,7 +100,7 @@ public class TaskHandler {
         return new Todo(userInput.substring(STARTING_INDEX_OF_TODO_TASK_DESCRIPTION));
     }
 
-    public static Event getEventInstance(String userInput) throws TaskHandlerException{
+    public static void handleEventTaskValidation(String userInput) throws TaskHandlerException{
         if (userInput.trim().length() < STARTING_INDEX_OF_EVENT_TASK_DESCRIPTION) {
             throw new TaskHandlerException("ERROR: Description, /from and /to timings of an 'event' task cannot be empty");
         }
@@ -104,15 +108,20 @@ public class TaskHandler {
         if (!userInput.contains(" /from")) {
             throw new TaskHandlerException("ERROR: No '/from' time specified for an 'event' task");
         }
-        int endIndexOfEventDescription = userInput.indexOf(" /from");
-        String eventTaskDescription = userInput.substring(STARTING_INDEX_OF_EVENT_TASK_DESCRIPTION,
-                endIndexOfEventDescription);
-
-        int eventFromTimeStartIndex = userInput.indexOf("/from") + ("/from").length();
 
         if (!userInput.contains(" /to")) {
             throw new TaskHandlerException("ERROR: No '/to' time specified for an 'event' task");
         }
+    }
+
+    public static Event getEventInstance(String userInput) throws TaskHandlerException{
+        handleEventTaskValidation(userInput);
+
+        int endIndexOfEventDescription = userInput.indexOf(" /from");
+        String eventTaskDescription = userInput.substring(STARTING_INDEX_OF_EVENT_TASK_DESCRIPTION,
+                endIndexOfEventDescription);
+        int eventFromTimeStartIndex = userInput.indexOf("/from") + ("/from").length();
+
         int eventFromTimeEndIndex = userInput.indexOf(" /to");
         String eventTaskFromTime = userInput.substring(eventFromTimeStartIndex, eventFromTimeEndIndex);
 
@@ -122,7 +131,7 @@ public class TaskHandler {
         return new Event(eventTaskDescription, eventTaskFromTime, eventTaskToTime);
     }
 
-    public static Deadline getDeadlineInstance(String userInput) throws TaskHandlerException{
+    public static void handleDeadlineTaskValidation(String userInput) throws TaskHandlerException{
         if (userInput.trim().length() < STARTING_INDEX_OF_DEADLINE_TASK_DESCRIPTION) {
             throw new TaskHandlerException("ERROR: Description and /by date of a 'deadline' task cannot be empty");
         }
@@ -130,6 +139,10 @@ public class TaskHandler {
         if (!userInput.contains(" /by")) {
             throw new TaskHandlerException("ERROR: No '/by' date specified for a 'deadline' task");
         }
+    }
+
+    public static Deadline getDeadlineInstance(String userInput) throws TaskHandlerException{
+        handleDeadlineTaskValidation(userInput);
 
         int endIndexOfDeadlineDescription = userInput.indexOf(" /by");
         String deadlineTaskDescription = userInput.substring(STARTING_INDEX_OF_DEADLINE_TASK_DESCRIPTION,
@@ -164,6 +177,7 @@ public class TaskHandler {
         } else if (userInput.startsWith("deadline ")) {
             Deadline deadlineTask = getDeadlineInstance(userInput);
             userTaskArray[taskIndex] = deadlineTask;
+
         } else {
             throw new TaskHandlerException("ERROR: Unknown task type. Valid tasks are 'todo', 'event', 'deadline'");
         }
@@ -188,19 +202,19 @@ public class TaskHandler {
             } else if (userInput.startsWith("mark ")) {
                 int taskNumber = Integer.parseInt(userInput.substring(INDEX_TO_CHECK_TO_GET_TASK_NUMBER_TO_MARK));
                 updateTaskStatus(userTaskArray, taskNumber, "mark");
-                drawHorizontalLine("top");
+                drawHorizontalLine(LineLocation.TOP);
                 displayMarkedSuccessMessage(userTaskArray, taskNumber);
-                drawHorizontalLine("bottom");
+                drawHorizontalLine(LineLocation.BOTTOM);
 
             } else if (userInput.startsWith("unmark ")) {
                 int taskNumber = Integer.parseInt(userInput.substring(INDEX_TO_CHECK_TO_GET_TASK_NUMBER_TO_UNMARK));
                 updateTaskStatus(userTaskArray, taskNumber, "unmark");
-                drawHorizontalLine("top");
+                drawHorizontalLine(LineLocation.TOP);
                 displayUnmarkedSuccessMessage(userTaskArray, taskNumber);
-                drawHorizontalLine("bottom");
+                drawHorizontalLine(LineLocation.BOTTOM);
 
             } else {
-                drawHorizontalLine("top");
+                drawHorizontalLine(LineLocation.TOP);
                 try {
                     determineTaskTypeAndDisplay(userTaskArray, userInput, numberOfTasks);
                     numberOfTasks = numberOfTasks + 1;
@@ -208,12 +222,12 @@ public class TaskHandler {
                     addIndentation(NUMBER_OF_SPACES_TO_INDENT_ERROR_MESSAGE);
                     System.out.println(e.getMessage());
                 }
-                drawHorizontalLine("bottom");
+                drawHorizontalLine(LineLocation.BOTTOM);
             }
         }
-        drawHorizontalLine("top");
+        drawHorizontalLine(LineLocation.TOP);
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_BYE_MESSAGE);
         System.out.println("I hope I helped you! Bye for now");
-        drawHorizontalLine("bottom");
+        drawHorizontalLine(LineLocation.BOTTOM);
     }
 }
