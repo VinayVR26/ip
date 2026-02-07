@@ -14,6 +14,7 @@ public class TaskHandler {
     private static final int NUMBER_OF_SPACES_TO_INDENT_UNMARKED_TASK_DESCRIPTION = 7;
     private static final int NUMBER_OF_SPACES_TO_INDENT_BYE_MESSAGE = 5;
     private static final int NUMBER_OF_SPACES_TO_INDENT_EACH_TASK_ADDED = 5;
+    private static final int NUMBER_OF_SPACES_TO_INDENT_ERROR_MESSAGE = 5;
 
     private static final int INDEX_TO_CHECK_TO_GET_TASK_NUMBER_TO_MARK = 5;
     private static final int INDEX_TO_CHECK_TO_GET_TASK_NUMBER_TO_UNMARK = 7;
@@ -88,7 +89,10 @@ public class TaskHandler {
         System.out.println("[ ] " + userTaskArray[taskNumber - 1].taskDescription);
     }
 
-    public static Todo getTodoInstance(String userInput) {
+    public static Todo getTodoInstance(String userInput) throws TaskHandlerException{
+        if (userInput.trim().length() < STARTING_INDEX_OF_TODO_TASK_DESCRIPTION) {
+            throw new TaskHandlerException("ERROR: Description of a 'todo' cannot be empty");
+        }
         return new Todo(userInput.substring(STARTING_INDEX_OF_TODO_TASK_DESCRIPTION));
     }
 
@@ -127,7 +131,9 @@ public class TaskHandler {
         System.out.println("Now you have " + (taskIndex + 1) + " tasks in the list.");
     }
 
-    public static void determineTaskTypeAndDisplay(Task[] userTaskArray, String userInput, int taskIndex) {
+    public static void determineTaskTypeAndDisplay(Task[] userTaskArray,
+            String userInput, int taskIndex) throws TaskHandlerException {
+
         if (userInput.startsWith("todo")) {
             Todo todoTask = getTodoInstance(userInput);
             userTaskArray[taskIndex] = todoTask;
@@ -174,8 +180,13 @@ public class TaskHandler {
 
             } else {
                 drawHorizontalLine("top");
-                determineTaskTypeAndDisplay(userTaskArray, userInput, numberOfTasks);
-                numberOfTasks = numberOfTasks + 1;
+                try {
+                    determineTaskTypeAndDisplay(userTaskArray, userInput, numberOfTasks);
+                    numberOfTasks = numberOfTasks + 1;
+                } catch (Exception e) {
+                    addIndentation(NUMBER_OF_SPACES_TO_INDENT_ERROR_MESSAGE);
+                    System.out.println(e.getMessage());
+                }
                 drawHorizontalLine("bottom");
             }
         }
