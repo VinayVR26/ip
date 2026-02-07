@@ -98,7 +98,7 @@ public class TaskHandler {
 
     public static Event getEventInstance(String userInput) throws TaskHandlerException{
         if (userInput.trim().length() < STARTING_INDEX_OF_EVENT_TASK_DESCRIPTION) {
-            throw new TaskHandlerException("ERROR: Description, /from and /to timings of an 'event' cannot be empty");
+            throw new TaskHandlerException("ERROR: Description, /from and /to timings of an 'event' task cannot be empty");
         }
 
         if (!userInput.contains(" /from")) {
@@ -122,7 +122,15 @@ public class TaskHandler {
         return new Event(eventTaskDescription, eventTaskFromTime, eventTaskToTime);
     }
 
-    public static Deadline getDeadlineInstance(String userInput) {
+    public static Deadline getDeadlineInstance(String userInput) throws TaskHandlerException{
+        if (userInput.trim().length() < STARTING_INDEX_OF_DEADLINE_TASK_DESCRIPTION) {
+            throw new TaskHandlerException("ERROR: Description and /by date of a 'deadline' task cannot be empty");
+        }
+
+        if (!userInput.contains(" /by")) {
+            throw new TaskHandlerException("ERROR: No '/by' date specified for a 'deadline' task");
+        }
+
         int endIndexOfDeadlineDescription = userInput.indexOf(" /by");
         String deadlineTaskDescription = userInput.substring(STARTING_INDEX_OF_DEADLINE_TASK_DESCRIPTION,
                 endIndexOfDeadlineDescription);
@@ -145,17 +153,19 @@ public class TaskHandler {
     public static void determineTaskTypeAndDisplay(Task[] userTaskArray,
             String userInput, int taskIndex) throws TaskHandlerException {
 
-        if (userInput.startsWith("todo")) {
+        if (userInput.startsWith("todo ")) {
             Todo todoTask = getTodoInstance(userInput);
             userTaskArray[taskIndex] = todoTask;
 
-        } else if (userInput.startsWith("event")) {
+        } else if (userInput.startsWith("event ")) {
             Event eventTask = getEventInstance(userInput);
             userTaskArray[taskIndex] = eventTask;
 
-        } else {
+        } else if (userInput.startsWith("deadline ")) {
             Deadline deadlineTask = getDeadlineInstance(userInput);
             userTaskArray[taskIndex] = deadlineTask;
+        } else {
+            throw new TaskHandlerException("ERROR: Unknown task type. Valid tasks are 'todo', 'event', 'deadline'");
         }
         displayTaskAddedMessage(userTaskArray[taskIndex], taskIndex);
     }
