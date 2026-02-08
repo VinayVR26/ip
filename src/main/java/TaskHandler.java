@@ -166,6 +166,11 @@ public class TaskHandler {
     public static void determineTaskTypeAndDisplay(Task[] userTaskArray,
             String userInput, int taskIndex) throws TaskHandlerException {
 
+        if (taskIndex == MAX_NUMBER_OF_TASKS) {
+            throw new TaskHandlerException("ERROR: Unable to add task. Maximum number of tasks of - " +
+                    MAX_NUMBER_OF_TASKS + " reached");
+        }
+
         if (userInput.startsWith("todo ")) {
             Todo todoTask = getTodoInstance(userInput);
             userTaskArray[taskIndex] = todoTask;
