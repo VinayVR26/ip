@@ -93,30 +93,40 @@ public class TaskHandler {
         System.out.println("[ ] " + userTaskArray[taskNumber - 1].taskDescription);
     }
 
-    public static Todo getTodoInstance(String userInput) throws TaskHandlerException{
+    public static void handleTodoTaskValidation(String userInput) throws TaskHandlerException {
         if (userInput.trim().length() < STARTING_INDEX_OF_TODO_TASK_DESCRIPTION) {
-            throw new TaskHandlerException("ERROR: Description of a 'todo' cannot be empty");
+            throw new TaskHandlerException("ERROR: Description of a 'todo' is empty. Please include it.");
         }
+    }
+
+    public static Todo getTodoInstance(String userInput) {
         return new Todo(userInput.substring(STARTING_INDEX_OF_TODO_TASK_DESCRIPTION));
     }
 
     public static void handleEventTaskValidation(String userInput) throws TaskHandlerException{
         if (userInput.trim().length() < STARTING_INDEX_OF_EVENT_TASK_DESCRIPTION) {
-            throw new TaskHandlerException("ERROR: Description, /from and /to timings of an 'event' task cannot be empty");
+            throw new TaskHandlerException("ERROR: Description, /from and /to timings of an 'event' task are empty. " +
+                    "Please include them.");
+        }
+
+        if (userInput.indexOf("/from") == STARTING_INDEX_OF_EVENT_TASK_DESCRIPTION) {
+            throw new TaskHandlerException("ERROR: Description of an 'event' task is empty. Please include it.");
+        }
+
+        if (!userInput.contains(" /from") && !userInput.contains(" /to")) {
+            throw new TaskHandlerException("ERROR: '/from' and '/to' time for an 'event' task are empty. Please include them.");
         }
 
         if (!userInput.contains(" /from")) {
-            throw new TaskHandlerException("ERROR: No '/from' time specified for an 'event' task");
+            throw new TaskHandlerException("ERROR: '/from' time for an 'event' task is empty. Please include it.");
         }
 
         if (!userInput.contains(" /to")) {
-            throw new TaskHandlerException("ERROR: No '/to' time specified for an 'event' task");
+            throw new TaskHandlerException("ERROR: '/to' time for an 'event' task is empty. Please include it.");
         }
     }
 
-    public static Event getEventInstance(String userInput) throws TaskHandlerException{
-        handleEventTaskValidation(userInput);
-
+    public static Event getEventInstance(String userInput) {
         int endIndexOfEventDescription = userInput.indexOf(" /from");
         String eventTaskDescription = userInput.substring(STARTING_INDEX_OF_EVENT_TASK_DESCRIPTION,
                 endIndexOfEventDescription);
@@ -133,16 +143,19 @@ public class TaskHandler {
 
     public static void handleDeadlineTaskValidation(String userInput) throws TaskHandlerException{
         if (userInput.trim().length() < STARTING_INDEX_OF_DEADLINE_TASK_DESCRIPTION) {
-            throw new TaskHandlerException("ERROR: Description and /by date of a 'deadline' task cannot be empty");
+            throw new TaskHandlerException("ERROR: Description and /by date of a 'deadline' task are empty. Please include them.");
+        }
+
+        if (userInput.indexOf("/by") == STARTING_INDEX_OF_DEADLINE_TASK_DESCRIPTION) {
+            throw new TaskHandlerException("ERROR: Description of a 'deadline' task is empty. Please include it.");
         }
 
         if (!userInput.contains(" /by")) {
-            throw new TaskHandlerException("ERROR: No '/by' date specified for a 'deadline' task");
+            throw new TaskHandlerException("ERROR: '/by' date of a 'deadline' task is empty. Please include it");
         }
     }
 
-    public static Deadline getDeadlineInstance(String userInput) throws TaskHandlerException{
-        handleDeadlineTaskValidation(userInput);
+    public static Deadline getDeadlineInstance(String userInput) {
 
         int endIndexOfDeadlineDescription = userInput.indexOf(" /by");
         String deadlineTaskDescription = userInput.substring(STARTING_INDEX_OF_DEADLINE_TASK_DESCRIPTION,
@@ -169,17 +182,19 @@ public class TaskHandler {
         if (taskIndex == MAX_NUMBER_OF_TASKS) {
             throw new TaskHandlerException("ERROR: Unable to add task. Maximum number of tasks of - " +
                     MAX_NUMBER_OF_TASKS + " reached");
-        }
 
-        if (userInput.startsWith("todo ")) {
+        } else if (userInput.startsWith("todo")) {
+            handleTodoTaskValidation(userInput);
             Todo todoTask = getTodoInstance(userInput);
             userTaskArray[taskIndex] = todoTask;
 
-        } else if (userInput.startsWith("event ")) {
+        } else if (userInput.startsWith("event")) {
+            handleEventTaskValidation(userInput);
             Event eventTask = getEventInstance(userInput);
             userTaskArray[taskIndex] = eventTask;
 
-        } else if (userInput.startsWith("deadline ")) {
+        } else if (userInput.startsWith("deadline")) {
+            handleDeadlineTaskValidation(userInput);
             Deadline deadlineTask = getDeadlineInstance(userInput);
             userTaskArray[taskIndex] = deadlineTask;
 
