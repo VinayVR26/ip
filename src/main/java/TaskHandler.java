@@ -240,6 +240,8 @@ public class TaskHandler {
             Deadline deadlineTask = getDeadlineInstance(userInput);
             userTaskArray.add(deadlineTask);
 
+        } else {
+            throw new TaskHandlerException("ERROR: Unknown task type. Valid tasks are 'todo', 'event', 'deadline'");
         }
         displayTaskAddedMessage(userTaskArray.get(taskIndex), taskIndex);
     }
@@ -253,6 +255,7 @@ public class TaskHandler {
                 System.err.println("Error: Unable to create directory.");
             }
         }
+        
         if (!f.exists()) {
             try {
                 boolean isFileCreated = f.createNewFile();
