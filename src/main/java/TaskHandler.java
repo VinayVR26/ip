@@ -11,9 +11,9 @@ public class TaskHandler {
     private static final int NUMBER_OF_SPACES_TO_INDENT_TASK_ADDED_SUCCESS_MESSAGE = 5;
     private static final int NUMBER_OF_SPACES_TO_INDENT_ADDED_TASK_DESCRIPTION= 7;
     private static final int NUMBER_OF_SPACES_TO_INDENT_TASK_MARKED_SUCCESS_MESSAGE = 5;
-    private static final int NUMBER_OF_SPACES_TO_INDENT_MARKED_TASK_DESCRIPTION= 7;
+    private static final int NUMBER_OF_SPACES_TO_INDENT_TASK_DETAILS= 7;
     private static final int NUMBER_OF_SPACES_TO_INDENT_TASK_UNMARKED_SUCCESS_MESSAGE = 5;
-    private static final int NUMBER_OF_SPACES_TO_INDENT_UNMARKED_TASK_DESCRIPTION = 7;
+    private static final int NUMBER_OF_SPACES_TO_INDENT_TASK_DELETE_SUCCESS_MESSAGE= 5;
     private static final int NUMBER_OF_SPACES_TO_INDENT_BYE_MESSAGE = 5;
     private static final int NUMBER_OF_SPACES_TO_INDENT_EACH_TASK_ADDED = 5;
     private static final int NUMBER_OF_SPACES_TO_INDENT_ERROR_MESSAGE = 5;
@@ -86,18 +86,36 @@ public class TaskHandler {
     public static void displayMarkedSuccessMessage(int taskNumber) {
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_TASK_MARKED_SUCCESS_MESSAGE);
         System.out.println("Nice! I've marked this task as done:");
-        addIndentation(NUMBER_OF_SPACES_TO_INDENT_MARKED_TASK_DESCRIPTION);
+        addIndentation(NUMBER_OF_SPACES_TO_INDENT_TASK_DETAILS);
         System.out.println("[X] " + userTaskArray.get(taskNumber - 1).taskDescription);
     }
 
     public static void displayUnmarkedSuccessMessage(int taskNumber) {
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_TASK_UNMARKED_SUCCESS_MESSAGE);
         System.out.println("OK, I've marked this task as not done yet:");
-        addIndentation(NUMBER_OF_SPACES_TO_INDENT_UNMARKED_TASK_DESCRIPTION);
+        addIndentation(NUMBER_OF_SPACES_TO_INDENT_TASK_DETAILS);
         System.out.println("[ ] " + userTaskArray.get(taskNumber - 1).taskDescription);
     }
 
+    public static void deleteTask(int taskNumber) {
+        userTaskArray.remove(taskNumber - 1);
+    }
+
+    public static void displayDeleteSuccessMessage(int taskNumber) {
+        addIndentation(NUMBER_OF_SPACES_TO_INDENT_TASK_DELETE_SUCCESS_MESSAGE);
+        System.out.println("Noted. I've removed this task:");
+        addIndentation(NUMBER_OF_SPACES_TO_INDENT_TASK_DETAILS);
+        System.out.println(userTaskArray.get(taskNumber - 1));
+        addIndentation(NUMBER_OF_SPACES_TO_INDENT_TASK_DELETE_SUCCESS_MESSAGE);
+        System.out.println("Now you have " + (userTaskArray.size() - 1) + " tasks in the list.");
+    }
+
     public static void handleTodoTaskValidation(String userInput) throws TaskHandlerException {
+        if (userInput.length() >= STARTING_INDEX_OF_TODO_TASK_DESCRIPTION &&
+                (userInput.charAt(STARTING_INDEX_OF_TODO_TASK_DESCRIPTION - 1) != ' ')) {
+            throw new TaskHandlerException("ERROR: Unknown task type. Valid tasks are 'todo', 'event', 'deadline'");
+        }
+
         if (userInput.trim().length() < STARTING_INDEX_OF_TODO_TASK_DESCRIPTION) {
             throw new TaskHandlerException("ERROR: Description of a 'todo' is empty. Please include it.");
         }
@@ -108,6 +126,10 @@ public class TaskHandler {
     }
 
     public static void handleEventTaskValidation(String userInput) throws TaskHandlerException{
+        if (userInput.length() >= STARTING_INDEX_OF_EVENT_TASK_DESCRIPTION &&
+                (userInput.charAt(STARTING_INDEX_OF_EVENT_TASK_DESCRIPTION - 1) != ' ')) {
+            throw new TaskHandlerException("ERROR: Unknown task type. Valid tasks are 'todo', 'event', 'deadline'");
+        }
         if (userInput.trim().length() < STARTING_INDEX_OF_EVENT_TASK_DESCRIPTION) {
             throw new TaskHandlerException("ERROR: Description, /from and /to timings of an 'event' task are empty. " +
                     "Please include them.");
@@ -146,6 +168,10 @@ public class TaskHandler {
     }
 
     public static void handleDeadlineTaskValidation(String userInput) throws TaskHandlerException{
+        if (userInput.length() >= STARTING_INDEX_OF_DEADLINE_TASK_DESCRIPTION &&
+                (userInput.charAt(STARTING_INDEX_OF_DEADLINE_TASK_DESCRIPTION - 1) != ' ')) {
+            throw new TaskHandlerException("ERROR: Unknown task type. Valid tasks are 'todo', 'event', 'deadline'");
+        }
         if (userInput.trim().length() < STARTING_INDEX_OF_DEADLINE_TASK_DESCRIPTION) {
             throw new TaskHandlerException("ERROR: Description and /by date of a 'deadline' task are empty. Please include them.");
         }
@@ -160,7 +186,6 @@ public class TaskHandler {
     }
 
     public static Deadline getDeadlineInstance(String userInput) {
-
         int endIndexOfDeadlineDescription = userInput.indexOf(" /by");
         String deadlineTaskDescription = userInput.substring(STARTING_INDEX_OF_DEADLINE_TASK_DESCRIPTION,
                 endIndexOfDeadlineDescription);
@@ -181,7 +206,6 @@ public class TaskHandler {
     }
 
     public static void determineTaskTypeAndDisplay(String userInput, int taskIndex) throws TaskHandlerException {
-
         if (taskIndex == MAX_NUMBER_OF_TASKS) {
             throw new TaskHandlerException("ERROR: Unable to add task. Maximum number of tasks of - " +
                     MAX_NUMBER_OF_TASKS + " reached");
@@ -201,11 +225,11 @@ public class TaskHandler {
             Deadline deadlineTask = getDeadlineInstance(userInput);
             userTaskArray.add(deadlineTask);
 
-        } else {
-            throw new TaskHandlerException("ERROR: Unknown task type. Valid tasks are 'todo', 'event', 'deadline'");
         }
         displayTaskAddedMessage(userTaskArray.get(taskIndex), taskIndex);
     }
+
+
 
     public static void echoUser() {
         String userInput;
@@ -234,6 +258,14 @@ public class TaskHandler {
                 drawHorizontalLine(LineLocation.TOP);
                 displayUnmarkedSuccessMessage(taskNumber);
                 drawHorizontalLine(LineLocation.BOTTOM);
+
+            } else if (userInput.startsWith("delete ")) {
+                int taskNumber = Integer.parseInt(userInput.substring(INDEX_TO_CHECK_TO_GET_TASK_NUMBER_TO_UNMARK));
+                drawHorizontalLine(LineLocation.TOP);
+                displayDeleteSuccessMessage(taskNumber);
+                drawHorizontalLine(LineLocation.BOTTOM);
+                deleteTask(taskNumber);
+                numberOfTasks = numberOfTasks - 1;
 
             } else {
                 drawHorizontalLine(LineLocation.TOP);
