@@ -1,4 +1,6 @@
+import java.sql.Array;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class TaskHandler {
 
@@ -21,6 +23,8 @@ public class TaskHandler {
     private static final int STARTING_INDEX_OF_TODO_TASK_DESCRIPTION = 5;
     private static final int STARTING_INDEX_OF_EVENT_TASK_DESCRIPTION = 6;
     private static final int STARTING_INDEX_OF_DEADLINE_TASK_DESCRIPTION = 9;
+
+    private static ArrayList<Task> userTaskArray = new ArrayList<>();
 
     public enum LineLocation {
         TOP, BOTTOM;
@@ -59,38 +63,38 @@ public class TaskHandler {
         }
     }
 
-    public static void displayContentOfSpecificTask(Task[] userTaskArray, int taskIndex) {
+    public static void displayContentOfSpecificTask(int taskIndex) {
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_EACH_TASK_ADDED);
         System.out.print((taskIndex + 1) + ".");
-        System.out.println(userTaskArray[taskIndex]);
+        System.out.println(userTaskArray.get(taskIndex));
     }
 
-    public static void displayUserDataArray(Task[] userTaskArray, int numberOfTasks) {
+    public static void displayUserDataArray(int numberOfTasks) {
         drawHorizontalLine(LineLocation.TOP);
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_EACH_TASK_ADDED);
         System.out.println("Here are the tasks in your list");
         for (int taskIndex = 0; taskIndex < numberOfTasks; taskIndex += 1){
-            displayContentOfSpecificTask(userTaskArray,  taskIndex);
+            displayContentOfSpecificTask(taskIndex);
         }
         drawHorizontalLine(LineLocation.BOTTOM);
     }
 
-    public static void updateTaskStatus(Task[] userTaskArray, int taskNumber, String toDo) {
-        userTaskArray[taskNumber - 1].setTaskStatus(toDo.equals("mark"));
+    public static void updateTaskStatus(int taskNumber, String toDo) {
+        userTaskArray.get(taskNumber - 1).setTaskStatus(toDo.equals("mark"));
     }
 
-    public static void displayMarkedSuccessMessage(Task[] userTaskArray, int taskNumber) {
+    public static void displayMarkedSuccessMessage(int taskNumber) {
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_TASK_MARKED_SUCCESS_MESSAGE);
         System.out.println("Nice! I've marked this task as done:");
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_MARKED_TASK_DESCRIPTION);
-        System.out.println("[X] " + userTaskArray[taskNumber - 1].taskDescription);
+        System.out.println("[X] " + userTaskArray.get(taskNumber - 1).taskDescription);
     }
 
-    public static void displayUnmarkedSuccessMessage(Task[] userTaskArray, int taskNumber) {
+    public static void displayUnmarkedSuccessMessage(int taskNumber) {
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_TASK_UNMARKED_SUCCESS_MESSAGE);
         System.out.println("OK, I've marked this task as not done yet:");
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_UNMARKED_TASK_DESCRIPTION);
-        System.out.println("[ ] " + userTaskArray[taskNumber - 1].taskDescription);
+        System.out.println("[ ] " + userTaskArray.get(taskNumber - 1).taskDescription);
     }
 
     public static void handleTodoTaskValidation(String userInput) throws TaskHandlerException {
@@ -176,8 +180,7 @@ public class TaskHandler {
         System.out.println("Now you have " + (taskIndex + 1) + " tasks in the list.");
     }
 
-    public static void determineTaskTypeAndDisplay(Task[] userTaskArray,
-            String userInput, int taskIndex) throws TaskHandlerException {
+    public static void determineTaskTypeAndDisplay(String userInput, int taskIndex) throws TaskHandlerException {
 
         if (taskIndex == MAX_NUMBER_OF_TASKS) {
             throw new TaskHandlerException("ERROR: Unable to add task. Maximum number of tasks of - " +
@@ -186,27 +189,26 @@ public class TaskHandler {
         } else if (userInput.startsWith("todo")) {
             handleTodoTaskValidation(userInput);
             Todo todoTask = getTodoInstance(userInput);
-            userTaskArray[taskIndex] = todoTask;
+            userTaskArray.add(todoTask);
 
         } else if (userInput.startsWith("event")) {
             handleEventTaskValidation(userInput);
             Event eventTask = getEventInstance(userInput);
-            userTaskArray[taskIndex] = eventTask;
+            userTaskArray.add(eventTask);
 
         } else if (userInput.startsWith("deadline")) {
             handleDeadlineTaskValidation(userInput);
             Deadline deadlineTask = getDeadlineInstance(userInput);
-            userTaskArray[taskIndex] = deadlineTask;
+            userTaskArray.add(deadlineTask);
 
         } else {
             throw new TaskHandlerException("ERROR: Unknown task type. Valid tasks are 'todo', 'event', 'deadline'");
         }
-        displayTaskAddedMessage(userTaskArray[taskIndex], taskIndex);
+        displayTaskAddedMessage(userTaskArray.get(taskIndex), taskIndex);
     }
 
     public static void echoUser() {
         String userInput;
-        Task[] userTaskArray = new Task[MAX_NUMBER_OF_TASKS];
         int numberOfTasks = 0;
         Scanner in = new Scanner(System.in);
 
@@ -217,26 +219,26 @@ public class TaskHandler {
                 break;
 
             } else if (userInput.equals("list")) {
-                displayUserDataArray(userTaskArray, numberOfTasks);
+                displayUserDataArray(numberOfTasks);
 
             } else if (userInput.startsWith("mark ")) {
                 int taskNumber = Integer.parseInt(userInput.substring(INDEX_TO_CHECK_TO_GET_TASK_NUMBER_TO_MARK));
-                updateTaskStatus(userTaskArray, taskNumber, "mark");
+                updateTaskStatus(taskNumber, "mark");
                 drawHorizontalLine(LineLocation.TOP);
-                displayMarkedSuccessMessage(userTaskArray, taskNumber);
+                displayMarkedSuccessMessage(taskNumber);
                 drawHorizontalLine(LineLocation.BOTTOM);
 
             } else if (userInput.startsWith("unmark ")) {
                 int taskNumber = Integer.parseInt(userInput.substring(INDEX_TO_CHECK_TO_GET_TASK_NUMBER_TO_UNMARK));
-                updateTaskStatus(userTaskArray, taskNumber, "unmark");
+                updateTaskStatus(taskNumber, "unmark");
                 drawHorizontalLine(LineLocation.TOP);
-                displayUnmarkedSuccessMessage(userTaskArray, taskNumber);
+                displayUnmarkedSuccessMessage(taskNumber);
                 drawHorizontalLine(LineLocation.BOTTOM);
 
             } else {
                 drawHorizontalLine(LineLocation.TOP);
                 try {
-                    determineTaskTypeAndDisplay(userTaskArray, userInput, numberOfTasks);
+                    determineTaskTypeAndDisplay(userInput, numberOfTasks);
                     numberOfTasks = numberOfTasks + 1;
                 } catch (Exception e) {
                     addIndentation(NUMBER_OF_SPACES_TO_INDENT_ERROR_MESSAGE);
