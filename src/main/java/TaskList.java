@@ -15,8 +15,8 @@ public class TaskList {
         this.taskArrayList.add(task);
     }
 
-    public Task deleteTask(int taskIndex) {
-        return taskArrayList.remove(taskIndex);
+    public Task deleteTask(int taskNumber) {
+        return taskArrayList.remove(taskNumber - 1);
     }
 
     public void markTask(int taskNumber) {
@@ -27,8 +27,8 @@ public class TaskList {
         taskArrayList.get(taskNumber - 1).setTaskStatus(false);
     }
 
-    public Task getTask(int taskIndex) {
-        return taskArrayList.get(taskIndex);
+    public Task getTask(int taskNumber) {
+        return taskArrayList.get(taskNumber - 1);
     }
 
     public ArrayList<Task> getTaskArrayList() {
