@@ -1,5 +1,4 @@
 import java.util.Scanner;
-import java.util.ArrayList;
 
 public class TaskHandler {
     private static final int MAX_NUMBER_OF_TASKS = 100;
@@ -21,8 +20,8 @@ public class TaskHandler {
 
     private static final String FILE_PATH = "./data/task_handler.txt";
 
-    private static ArrayList<Task> userTaskArrayList = new ArrayList<>(MAX_NUMBER_OF_TASKS);
-    private static Storage dataStorage = new Storage(FILE_PATH);
+    private static final TaskList userTaskArrayList = new TaskList(MAX_NUMBER_OF_TASKS);
+    private static final Storage dataStorage = new Storage(FILE_PATH);
 
     public enum LineLocation {
         TOP, BOTTOM
@@ -65,7 +64,7 @@ public class TaskHandler {
     public static void displayContentOfSpecificTask(int taskIndex) {
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_EACH_TASK_ADDED);
         System.out.print((taskIndex + 1) + ".");
-        System.out.println(userTaskArrayList.get(taskIndex));
+        System.out.println(userTaskArrayList.getTask(taskIndex));
     }
 
     public static void displayUserDataArray(int numberOfTasks) {
@@ -78,35 +77,27 @@ public class TaskHandler {
         drawHorizontalLine(LineLocation.BOTTOM);
     }
 
-    public static void updateTaskStatus(int taskNumber, String toDo) {
-        userTaskArrayList.get(taskNumber - 1).setTaskStatus(toDo.equals("mark"));
-    }
-
     public static void displayMarkedSuccessMessage(int taskNumber) {
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_TASK_MARKED_SUCCESS_MESSAGE);
         System.out.println("Nice! I've marked this task as done:");
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_TASK_DETAILS);
-        System.out.println("[X] " + userTaskArrayList.get(taskNumber - 1).taskDescription);
+        System.out.println("[X] " + userTaskArrayList.getTask(taskNumber - 1).taskDescription);
     }
 
     public static void displayUnmarkedSuccessMessage(int taskNumber) {
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_TASK_UNMARKED_SUCCESS_MESSAGE);
         System.out.println("OK, I've marked this task as not done yet:");
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_TASK_DETAILS);
-        System.out.println("[ ] " + userTaskArrayList.get(taskNumber - 1).taskDescription);
-    }
-
-    public static void deleteTask(int taskNumber) {
-        userTaskArrayList.remove(taskNumber - 1);
+        System.out.println("[ ] " + userTaskArrayList.getTask(taskNumber - 1).taskDescription);
     }
 
     public static void displayDeleteSuccessMessage(int taskNumber) {
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_TASK_DELETE_SUCCESS_MESSAGE);
         System.out.println("Noted. I've removed this task:");
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_TASK_DETAILS);
-        System.out.println(userTaskArrayList.get(taskNumber - 1));
+        System.out.println(userTaskArrayList.getTask(taskNumber - 1));
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_TASK_DELETE_SUCCESS_MESSAGE);
-        System.out.println("Now you have " + (userTaskArrayList.size() - 1) + " tasks in the list.");
+        System.out.println("Now you have " + (userTaskArrayList.getSize() - 1) + " tasks in the list.");
     }
 
     public static void determineTaskTypeAndDisplay(String userInput, int taskNumber) throws TaskHandlerException {
@@ -116,7 +107,7 @@ public class TaskHandler {
         }
 
         Task newTask = Parser.determineTaskType(userInput);
-        userTaskArrayList.add(newTask);
+        userTaskArrayList.addTask(newTask);
         displayTaskAddedMessage(newTask, taskNumber);
     }
 
@@ -129,11 +120,9 @@ public class TaskHandler {
         System.out.println("Now you have " + (taskIndex + 1) + " tasks in the list.");
     }
 
-
-
     public static void echoUser() {
         String userInput;
-        int numberOfTasks = dataStorage.loadData(userTaskArrayList);
+        int numberOfTasks = dataStorage.loadData(userTaskArrayList.getTaskArrayList());
         Scanner in = new Scanner(System.in);
 
         while (true) {
@@ -147,14 +136,14 @@ public class TaskHandler {
 
             } else if (userInput.startsWith("mark ")) {
                 int taskNumber = Integer.parseInt(userInput.substring(INDEX_TO_CHECK_TO_GET_TASK_NUMBER_TO_MARK));
-                updateTaskStatus(taskNumber, "mark");
+                userTaskArrayList.markTask(taskNumber);
                 drawHorizontalLine(LineLocation.TOP);
                 displayMarkedSuccessMessage(taskNumber);
                 drawHorizontalLine(LineLocation.BOTTOM);
 
             } else if (userInput.startsWith("unmark ")) {
                 int taskNumber = Integer.parseInt(userInput.substring(INDEX_TO_CHECK_TO_GET_TASK_NUMBER_TO_UNMARK));
-                updateTaskStatus(taskNumber, "unmark");
+                userTaskArrayList.unMarkTask(taskNumber);
                 drawHorizontalLine(LineLocation.TOP);
                 displayUnmarkedSuccessMessage(taskNumber);
                 drawHorizontalLine(LineLocation.BOTTOM);
@@ -164,7 +153,7 @@ public class TaskHandler {
                 drawHorizontalLine(LineLocation.TOP);
                 displayDeleteSuccessMessage(taskNumber);
                 drawHorizontalLine(LineLocation.BOTTOM);
-                deleteTask(taskNumber);
+                userTaskArrayList.deleteTask(taskNumber);
                 numberOfTasks = numberOfTasks - 1;
 
             } else {
@@ -180,7 +169,7 @@ public class TaskHandler {
             }
         }
 
-        dataStorage.saveData(userTaskArrayList);
+        dataStorage.saveData(userTaskArrayList.getTaskArrayList());
         drawHorizontalLine(LineLocation.TOP);
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_BYE_MESSAGE);
         System.out.println("I hope I helped you! Bye for now");
