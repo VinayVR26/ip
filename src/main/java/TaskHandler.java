@@ -1,13 +1,7 @@
 import java.util.Scanner;
 import java.util.ArrayList;
-import java.io.FileNotFoundException;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-
 
 public class TaskHandler {
-
     private static final int MAX_NUMBER_OF_TASKS = 100;
     private static final int MAX_NUMBER_OF_DASHES = 60;
     private static final int NUMBER_OF_SPACES_TO_INDENT_HORIZONTAL_LINE = 4;
@@ -24,15 +18,10 @@ public class TaskHandler {
 
     private static final int INDEX_TO_CHECK_TO_GET_TASK_NUMBER_TO_MARK = 5;
     private static final int INDEX_TO_CHECK_TO_GET_TASK_NUMBER_TO_UNMARK = 7;
-    private static final int STARTING_INDEX_OF_TODO_TASK_DESCRIPTION = 5;
-    private static final int STARTING_INDEX_OF_EVENT_TASK_DESCRIPTION = 6;
-    private static final int STARTING_INDEX_OF_DEADLINE_TASK_DESCRIPTION = 9;
-
-
 
     private static final String FILE_PATH = "./data/task_handler.txt";
 
-    private static ArrayList<Task> userTaskArray = new ArrayList<>();
+    private static ArrayList<Task> userTaskArrayList = new ArrayList<>(MAX_NUMBER_OF_TASKS);
     private static Storage dataStorage = new Storage(FILE_PATH);
 
     public enum LineLocation {
@@ -76,7 +65,7 @@ public class TaskHandler {
     public static void displayContentOfSpecificTask(int taskIndex) {
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_EACH_TASK_ADDED);
         System.out.print((taskIndex + 1) + ".");
-        System.out.println(userTaskArray.get(taskIndex));
+        System.out.println(userTaskArrayList.get(taskIndex));
     }
 
     public static void displayUserDataArray(int numberOfTasks) {
@@ -90,120 +79,45 @@ public class TaskHandler {
     }
 
     public static void updateTaskStatus(int taskNumber, String toDo) {
-        userTaskArray.get(taskNumber - 1).setTaskStatus(toDo.equals("mark"));
+        userTaskArrayList.get(taskNumber - 1).setTaskStatus(toDo.equals("mark"));
     }
 
     public static void displayMarkedSuccessMessage(int taskNumber) {
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_TASK_MARKED_SUCCESS_MESSAGE);
         System.out.println("Nice! I've marked this task as done:");
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_TASK_DETAILS);
-        System.out.println("[X] " + userTaskArray.get(taskNumber - 1).taskDescription);
+        System.out.println("[X] " + userTaskArrayList.get(taskNumber - 1).taskDescription);
     }
 
     public static void displayUnmarkedSuccessMessage(int taskNumber) {
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_TASK_UNMARKED_SUCCESS_MESSAGE);
         System.out.println("OK, I've marked this task as not done yet:");
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_TASK_DETAILS);
-        System.out.println("[ ] " + userTaskArray.get(taskNumber - 1).taskDescription);
+        System.out.println("[ ] " + userTaskArrayList.get(taskNumber - 1).taskDescription);
     }
 
     public static void deleteTask(int taskNumber) {
-        userTaskArray.remove(taskNumber - 1);
+        userTaskArrayList.remove(taskNumber - 1);
     }
 
     public static void displayDeleteSuccessMessage(int taskNumber) {
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_TASK_DELETE_SUCCESS_MESSAGE);
         System.out.println("Noted. I've removed this task:");
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_TASK_DETAILS);
-        System.out.println(userTaskArray.get(taskNumber - 1));
+        System.out.println(userTaskArrayList.get(taskNumber - 1));
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_TASK_DELETE_SUCCESS_MESSAGE);
-        System.out.println("Now you have " + (userTaskArray.size() - 1) + " tasks in the list.");
+        System.out.println("Now you have " + (userTaskArrayList.size() - 1) + " tasks in the list.");
     }
 
-    public static void handleTodoTaskValidation(String userInput) throws TaskHandlerException {
-        if (userInput.length() >= STARTING_INDEX_OF_TODO_TASK_DESCRIPTION &&
-                (userInput.charAt(STARTING_INDEX_OF_TODO_TASK_DESCRIPTION - 1) != ' ')) {
-            throw new TaskHandlerException("ERROR: Unknown task type. Valid tasks are 'todo', 'event', 'deadline'");
+    public static void determineTaskTypeAndDisplay(String userInput, int taskNumber) throws TaskHandlerException {
+        if (taskNumber == MAX_NUMBER_OF_TASKS) {
+            throw new TaskHandlerException("ERROR: Unable to add task. Maximum number of tasks of - " +
+                    MAX_NUMBER_OF_TASKS + " reached");
         }
 
-        if (userInput.trim().length() < STARTING_INDEX_OF_TODO_TASK_DESCRIPTION) {
-            throw new TaskHandlerException("ERROR: Description of a 'todo' is empty. Please include it.");
-        }
-    }
-
-    public static Todo getTodoInstance(String userInput) {
-        return new Todo(userInput.substring(STARTING_INDEX_OF_TODO_TASK_DESCRIPTION));
-    }
-
-    public static void handleEventTaskValidation(String userInput) throws TaskHandlerException{
-        if (userInput.length() >= STARTING_INDEX_OF_EVENT_TASK_DESCRIPTION &&
-                (userInput.charAt(STARTING_INDEX_OF_EVENT_TASK_DESCRIPTION - 1) != ' ')) {
-            throw new TaskHandlerException("ERROR: Unknown task type. Valid tasks are 'todo', 'event', 'deadline'");
-        }
-        if (userInput.trim().length() < STARTING_INDEX_OF_EVENT_TASK_DESCRIPTION) {
-            throw new TaskHandlerException("ERROR: Description, /from and /to timings of an 'event' task are empty. " +
-                    "Please include them.");
-        }
-
-        if (userInput.indexOf("/from") == STARTING_INDEX_OF_EVENT_TASK_DESCRIPTION) {
-            throw new TaskHandlerException("ERROR: Description of an 'event' task is empty. Please include it.");
-        }
-
-        if (!userInput.contains(" /from") && !userInput.contains(" /to")) {
-            throw new TaskHandlerException("ERROR: '/from' and '/to' time for an 'event' task are empty. Please include them.");
-        }
-
-        if (!userInput.contains(" /from")) {
-            throw new TaskHandlerException("ERROR: '/from' time for an 'event' task is empty. Please include it.");
-        }
-
-        if (!userInput.contains(" /to")) {
-            throw new TaskHandlerException("ERROR: '/to' time for an 'event' task is empty. Please include it.");
-        }
-    }
-
-    public static Event getEventInstance(String userInput) {
-        int endIndexOfEventDescription = userInput.indexOf(" /from");
-        String eventTaskDescription = userInput.substring(STARTING_INDEX_OF_EVENT_TASK_DESCRIPTION,
-                endIndexOfEventDescription);
-        int eventFromTimeStartIndex = userInput.indexOf("/from") + ("/from").length();
-
-        int eventFromTimeEndIndex = userInput.indexOf(" /to");
-        String eventTaskFromTime = userInput.substring(eventFromTimeStartIndex, eventFromTimeEndIndex);
-
-        int eventToTimeStartIndex = userInput.indexOf("/to") + ("/to").length();
-        String eventTaskToTime = userInput.substring(eventToTimeStartIndex);
-
-        return new Event(eventTaskDescription, eventTaskFromTime, eventTaskToTime);
-    }
-
-    public static void handleDeadlineTaskValidation(String userInput) throws TaskHandlerException{
-        if (userInput.length() >= STARTING_INDEX_OF_DEADLINE_TASK_DESCRIPTION &&
-                (userInput.charAt(STARTING_INDEX_OF_DEADLINE_TASK_DESCRIPTION - 1) != ' ')) {
-            throw new TaskHandlerException("ERROR: Unknown task type. Valid tasks are 'todo', 'event', 'deadline'");
-        }
-        if (userInput.trim().length() < STARTING_INDEX_OF_DEADLINE_TASK_DESCRIPTION) {
-            throw new TaskHandlerException("ERROR: Description and /by date of a 'deadline' task are empty. Please include them.");
-        }
-
-        if (userInput.indexOf("/by") == STARTING_INDEX_OF_DEADLINE_TASK_DESCRIPTION) {
-            throw new TaskHandlerException("ERROR: Description of a 'deadline' task is empty. Please include it.");
-        }
-
-        if (!userInput.contains(" /by")) {
-            throw new TaskHandlerException("ERROR: '/by' date of a 'deadline' task is empty. Please include it");
-        }
-    }
-
-    public static Deadline getDeadlineInstance(String userInput) {
-        int endIndexOfDeadlineDescription = userInput.indexOf(" /by");
-        String deadlineTaskDescription = userInput.substring(STARTING_INDEX_OF_DEADLINE_TASK_DESCRIPTION,
-                endIndexOfDeadlineDescription);
-
-        int deadlineDateIndex = userInput.indexOf("/by") + ("/by").length();
-        String deadlineDate = userInput.substring(deadlineDateIndex);
-
-        return new Deadline(deadlineTaskDescription, deadlineDate);
+        Task newTask = Parser.determineTaskType(userInput);
+        userTaskArrayList.add(newTask);
+        displayTaskAddedMessage(newTask, taskNumber);
     }
 
     public static void displayTaskAddedMessage(Task taskObject, int taskIndex) {
@@ -215,35 +129,11 @@ public class TaskHandler {
         System.out.println("Now you have " + (taskIndex + 1) + " tasks in the list.");
     }
 
-    public static void determineTaskTypeAndDisplay(String userInput, int taskIndex) throws TaskHandlerException {
-        if (taskIndex == MAX_NUMBER_OF_TASKS) {
-            throw new TaskHandlerException("ERROR: Unable to add task. Maximum number of tasks of - " +
-                    MAX_NUMBER_OF_TASKS + " reached");
 
-        } else if (userInput.startsWith("todo")) {
-            handleTodoTaskValidation(userInput);
-            Todo todoTask = getTodoInstance(userInput);
-            userTaskArray.add(todoTask);
-
-        } else if (userInput.startsWith("event")) {
-            handleEventTaskValidation(userInput);
-            Event eventTask = getEventInstance(userInput);
-            userTaskArray.add(eventTask);
-
-        } else if (userInput.startsWith("deadline")) {
-            handleDeadlineTaskValidation(userInput);
-            Deadline deadlineTask = getDeadlineInstance(userInput);
-            userTaskArray.add(deadlineTask);
-
-        } else {
-            throw new TaskHandlerException("ERROR: Unknown task type. Valid tasks are 'todo', 'event', 'deadline'");
-        }
-        displayTaskAddedMessage(userTaskArray.get(taskIndex), taskIndex);
-    }
 
     public static void echoUser() {
         String userInput;
-        int numberOfTasks = dataStorage.loadData(userTaskArray);
+        int numberOfTasks = dataStorage.loadData(userTaskArrayList);
         Scanner in = new Scanner(System.in);
 
         while (true) {
@@ -290,7 +180,7 @@ public class TaskHandler {
             }
         }
 
-        dataStorage.saveData(userTaskArray);
+        dataStorage.saveData(userTaskArrayList);
         drawHorizontalLine(LineLocation.TOP);
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_BYE_MESSAGE);
         System.out.println("I hope I helped you! Bye for now");

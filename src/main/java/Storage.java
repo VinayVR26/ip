@@ -39,7 +39,7 @@ public class Storage {
         }
     }
 
-    public int loadData(ArrayList<Task> userTaskArray) {
+    public int loadData(ArrayList<Task> userTaskArrayList) {
         int numberOfTasks = 0;
         File f = new File(filePath);
         try {
@@ -66,7 +66,7 @@ public class Storage {
                 }
 
                 taskToAdd.setTaskStatus(isTaskDone);
-                userTaskArray.add(taskToAdd);
+                userTaskArrayList.add(taskToAdd);
                 numberOfTasks = numberOfTasks + 1;
             }
         } catch (FileNotFoundException e) {
@@ -75,10 +75,10 @@ public class Storage {
         return numberOfTasks;
     }
 
-    public void saveData(ArrayList<Task> userTaskArray) {
+    public void saveData(ArrayList<Task> userTaskArrayList) {
         try {
             FileWriter fw = new FileWriter(filePath);
-            for (Task taskToSave : userTaskArray) {
+            for (Task taskToSave : userTaskArrayList) {
                 String isTaskCompleted = (taskToSave.isTaskDone ? "1" : "0");
                 String lineInFile = "";
 
