@@ -153,8 +153,8 @@ public class Storage {
                             ((Deadline) taskToSave).endDate.substring(INDEX_OF_DATA_TO_SAVE_PAST_THE_FIRST_SPACE);
                 } else {
                     lineInFile = lineInFile + "E," + isTaskCompleted + "," + taskToSave.taskDescription + "," +
-                            ((Event) taskToSave).fromTime.substring(INDEX_OF_DATA_TO_SAVE_PAST_THE_FIRST_SPACE) + "," +
-                            ((Event) taskToSave).toTime.substring(INDEX_OF_DATA_TO_SAVE_PAST_THE_FIRST_SPACE);
+                            ((Event) taskToSave).fromPeriod.substring(INDEX_OF_DATA_TO_SAVE_PAST_THE_FIRST_SPACE) + "," +
+                            ((Event) taskToSave).toPeriod.substring(INDEX_OF_DATA_TO_SAVE_PAST_THE_FIRST_SPACE);
                 }
                 lineInFile = lineInFile + System.lineSeparator();
                 fw.write(lineInFile);
