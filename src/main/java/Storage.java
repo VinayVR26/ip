@@ -6,12 +6,19 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class Storage {
+
     private static final int INDEX_OF_TASK_TYPE_IN_FILE = 0;
+
     private static final int INDEX_OF_TASK_COMPLETION_IN_FILE = 1;
+
     private static final int INDEX_OF_TASK_DESCRIPTION_IN_FILE = 2;
+
     private static final int INDEX_OF_DEADLINE_TASK_BY_DATE_IN_FILE = 3;
+
     private static final int INDEX_OF_EVENT_TASK_FROM_TIME_IN_FILE = 3;
+
     private static final int INDEX_OF_EVENT_TASK_TO_TIME_IN_FILE = 4;
+
     private static final int INDEX_OF_DATA_TO_SAVE_PAST_THE_FIRST_SPACE = 1;
 
     private String filePath;

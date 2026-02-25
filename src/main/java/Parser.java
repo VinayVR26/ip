@@ -1,12 +1,7 @@
-import java.util.Scanner;
-import java.util.ArrayList;
-import java.io.IOException;
-
 public class Parser {
     private static final int STARTING_INDEX_OF_TODO_TASK_DESCRIPTION = 5;
     private static final int STARTING_INDEX_OF_EVENT_TASK_DESCRIPTION = 6;
     private static final int STARTING_INDEX_OF_DEADLINE_TASK_DESCRIPTION = 9;
-
 
     public static Task determineTaskType(String userInput) throws TaskHandlerException {
         if (userInput.startsWith("todo")) {

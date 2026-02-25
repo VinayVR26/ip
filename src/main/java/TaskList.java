@@ -1,14 +1,11 @@
 import java.util.ArrayList;
 
 public class TaskList {
+
     private final ArrayList<Task> taskArrayList;
 
     public TaskList(int maxNumberOfTasks) {
         this.taskArrayList = new ArrayList<>(maxNumberOfTasks);
-    }
-
-    public TaskList(ArrayList<Task> storedTasks) {
-        this.taskArrayList = storedTasks;
     }
 
     public void addTask(Task task) {

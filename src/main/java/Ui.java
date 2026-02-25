@@ -15,7 +15,6 @@ public class Ui {
     private static final int NUMBER_OF_SPACES_TO_INDENT_BYE_MESSAGE = 5;
     private static final int NUMBER_OF_SPACES_TO_INDENT_EACH_TASK_ADDED = 5;
     private static final int NUMBER_OF_SPACES_TO_INDENT_ERROR_MESSAGE = 5;
-
     private Scanner in;
 
     public enum LineLocation {
