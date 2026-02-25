@@ -5,28 +5,68 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * This class is used to manage the loading and saving of the current status of all tasks to a text file.
+ * The tasks are read from the text file on application startup and saved to the same text file on
+ * application termination.
+ */
 public class Storage {
 
+    /**
+     * Index of the task type letter in the {@code tokens}.
+     */
     private static final int INDEX_OF_TASK_TYPE_IN_FILE = 0;
 
+    /**
+     * Index of the task completion status in the {@code tokens}.
+     */
     private static final int INDEX_OF_TASK_COMPLETION_IN_FILE = 1;
 
+    /**
+     * Starting index of the task description in the {@code tokens}.
+     */
     private static final int INDEX_OF_TASK_DESCRIPTION_IN_FILE = 2;
 
+    /**
+     * Starting index of the /by date for a Deadline task in the {@code tokens}.
+     */
     private static final int INDEX_OF_DEADLINE_TASK_BY_DATE_IN_FILE = 3;
 
+    /**
+     * Starting index of the /from time for an Event task in the {@code tokens}.
+     */
     private static final int INDEX_OF_EVENT_TASK_FROM_TIME_IN_FILE = 3;
 
+    /**
+     * Starting index of the /to time for an Event task in the {@code tokens}.
+     */
     private static final int INDEX_OF_EVENT_TASK_TO_TIME_IN_FILE = 4;
 
+    /**
+     * Starting index to skip past the leading space charatcer when extracting the date and time fields
+     * {@code Deadline} and {@code Event} tasks.
+     */
     private static final int INDEX_OF_DATA_TO_SAVE_PAST_THE_FIRST_SPACE = 1;
 
+    /**
+     * The string containing the file path to load and save the data to.
+     */
     private String filePath;
 
+    /**
+     * Constructor to create an instance of {@code Storage}.
+     *
+     * @param filePath The file path to load and save the data to.
+     */
     public Storage(String filePath) {
         this.filePath = filePath;
     }
 
+    /**
+     * Checks if the folder path and text file exists in {@code filePath} location.
+     * If the folder path or file does not exist, they are created to prevent errors
+     * during read and write operations.
+     */
     public void ensureDataFileExists() {
         File f = new File(filePath);
         File directory = f.getParentFile();
@@ -46,6 +86,15 @@ public class Storage {
         }
     }
 
+    /**
+     * Reads the file containing task details from {@code filePath} and adds the tasks to the list.
+     * Each line in the file is extracted and is parsed into either a {@code Todo}, {@code Deadline} or
+     * {@code Event} object.
+     *
+     * @param userTaskArrayList The {@code ArrayList} where the {@code Task} objects that were loaded from
+     *                          the file, are added to.
+     * @return The total number of tasks loaded from the file.
+     */
     public int loadData(ArrayList<Task> userTaskArrayList) {
         int numberOfTasks = 0;
         File f = new File(filePath);
@@ -82,6 +131,14 @@ public class Storage {
         return numberOfTasks;
     }
 
+    /**
+     * Saves the tasks in {@code userTaskArrayList} to the file.
+     * Each {@code Task} object is formatted into a comma-seperated line and then
+     * written to the disk.
+     * Exisiting file content in the file is overwritten.
+     *
+     * @param userTaskArrayList The {@code ArrayList} of {@code Task} objects to be saved.
+     */
     public void saveData(ArrayList<Task> userTaskArrayList) {
         try {
             FileWriter fw = new FileWriter(filePath);
