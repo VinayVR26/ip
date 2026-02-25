@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Ui {
     private static final int MAX_NUMBER_OF_DASHES = 60;
@@ -10,6 +11,7 @@ public class Ui {
     private static final int NUMBER_OF_SPACES_TO_INDENT_TASK_DETAILS= 7;
     private static final int NUMBER_OF_SPACES_TO_INDENT_TASK_UNMARKED_SUCCESS_MESSAGE = 5;
     private static final int NUMBER_OF_SPACES_TO_INDENT_TASK_DELETE_SUCCESS_MESSAGE= 5;
+    private static final int NUMBER_OF_SPACES_TO_INDENT_MATCHING_TASK = 5;
     private static final int NUMBER_OF_SPACES_TO_INDENT_BYE_MESSAGE = 5;
     private static final int NUMBER_OF_SPACES_TO_INDENT_EACH_TASK_ADDED = 5;
     private static final int NUMBER_OF_SPACES_TO_INDENT_ERROR_MESSAGE = 5;
@@ -106,6 +108,23 @@ public class Ui {
         System.out.println(taskObject);
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_TASK_ADDED_SUCCESS_MESSAGE);
         System.out.println("Now you have " + userArrayListSize + " tasks in the list.");
+        drawHorizontalLine(LineLocation.BOTTOM);
+    }
+
+    public static void displayMatchignTasksMessage(ArrayList<Task> matchingTasksArrayList) {
+        drawHorizontalLine(LineLocation.TOP);
+        if (matchingTasksArrayList.isEmpty()) {
+            addIndentation(NUMBER_OF_SPACES_TO_INDENT_MATCHING_TASK);
+            System.out.println("There are no matching tasks in the list.");
+        } else {
+            int taskNumber = 1;
+            for (Task task : matchingTasksArrayList) {
+                addIndentation(NUMBER_OF_SPACES_TO_INDENT_MATCHING_TASK);
+                System.out.print(taskNumber + ".");
+                System.out.println(task);
+                taskNumber = taskNumber + 1;
+            }
+        }
         drawHorizontalLine(LineLocation.BOTTOM);
     }
 

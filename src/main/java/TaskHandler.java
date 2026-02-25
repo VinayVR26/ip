@@ -1,7 +1,10 @@
+import java.util.ArrayList;
+
 public class TaskHandler {
     private static final int MAX_NUMBER_OF_TASKS = 100;
     private static final int INDEX_TO_CHECK_TO_GET_TASK_NUMBER_TO_MARK = 5;
     private static final int INDEX_TO_CHECK_TO_GET_TASK_NUMBER_TO_UNMARK = 7;
+    private static final int INDEX_TO_CHECK_TO_GET_KEYWORD = 5;
 
     private static final String FILE_PATH = "./data/task_handler.txt";
     private static final TaskList userTaskArrayList = new TaskList(MAX_NUMBER_OF_TASKS);
@@ -53,6 +56,11 @@ public class TaskHandler {
                 int taskNumber = Integer.parseInt(userInput.substring(INDEX_TO_CHECK_TO_GET_TASK_NUMBER_TO_UNMARK));
                 Task deletedTask = userTaskArrayList.deleteTask(taskNumber);
                 ui.displayDeleteSuccessMessage(deletedTask, userTaskArrayList.getSize());
+
+            } else if (userInput.startsWith("find ")) {
+                String keyword = userInput.substring(INDEX_TO_CHECK_TO_GET_KEYWORD);
+                ArrayList<Task> matchingTasksArrayList = userTaskArrayList.findTasks(keyword);
+                ui.displayMatchignTasksMessage(matchingTasksArrayList);
 
             } else {
                 try {
