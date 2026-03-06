@@ -40,6 +40,7 @@ public class Task {
      * @return A string in the form "[X] <task description>" if the task is completed or
      *         "[ ] <task description>" if the task is not completed.
      */
+    @Override
     public String toString() {
         if (isTaskDone) {
             return "[X] " + taskDescription;

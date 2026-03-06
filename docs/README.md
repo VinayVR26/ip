@@ -18,7 +18,7 @@ Example: `todo cook food`
 The application will display a success message that the task has been added, the task
 itself and the new total number of tasks in the list.
 
-<img alt="img1.png" height="100" src="img_1.png" width="800"/>
+<img alt="output after adding a todo task" height="100" src="img_1.png" width="800"/>
 
 ## Adding a DEADLINE task
 
@@ -32,7 +32,7 @@ Example: `deadline submit slides /by March 10th, 9pm`
 The application will display a success message that the task has been added, the task
 itself and the new total number of tasks in the list.
 
-<img alt="img_5.png" height="130" src="img_5.png" width="770"/>
+<img alt="output after adding a deadline task" height="140" src="img_5.png" width="770"/>
 
 ## Adding an EVENT task
 
@@ -45,7 +45,7 @@ Example: `todo meeting /from 2pm /to 4pm`
 The application will display a success message that the task has been added, the task
 itself and the new total number of tasks in the list.
 
-<img alt="img_6.png" height="130" src="img_6.png" width="770"/>
+<img alt="output after adding an event task" height="130" src="img_6.png" width="770"/>
 
 ## Displaying all tasks
 
@@ -55,7 +55,7 @@ Format: `list`
 
 Example: `list`
 
-<img alt="img_4.png" height="130" src="img_4.png" width="770"/>
+<img alt="output of all tasks in the list" height="130" src="img_4.png" width="770"/>
 
 ## Mark a task as done
 
@@ -68,7 +68,7 @@ Example: `mark 2`
 The application displays a success message that the task has been marked as done and also
 displays the task with an [X].
 
-<img alt="img_7.png" height="130" src="img_7.png" width="770"/>
+<img alt="output after marking task 2 as completed" height="130" src="img_7.png" width="770"/>
 
 ## Unmark a task
 
@@ -81,7 +81,7 @@ Example: `mark 2`
 The application displays a success message that the task has been unmarked as not done and also
 displays the task with a [ ]
 
-<img alt="img_8.png" height="130" src="img_8.png" width="770"/>
+<img alt="output after unmarking task 2 as not completed" height="130" src="img_8.png" width="770"/>
 
 ## Find matching tasks by keyword
 
@@ -94,7 +94,7 @@ Example: `find cook`
 The application displays all tasks (along with their task type and completion status) 
 whose description contain the keyword 'cook'.
 
-<img alt="img_9.png" height="130" src="img_9.png" width="770"/>
+<img alt="output of all tasks with the word 'cook' in them" height="130" src="img_9.png" width="770"/>
 
 ## Delete a task
 
@@ -107,7 +107,7 @@ Example: `delete 3`
 The application displays the task that has been deleted along with its task type and completion status.
 It displays the number of tasks left in the list.
 
-<img alt="img_10.png" height="130" src="img_10.png" width="770"/>
+<img alt="output of task 3 deleted" height="130" src="img_10.png" width="770"/>
 
 ## Exit the application
 
@@ -119,4 +119,4 @@ Example: `bye`
 
 The application displays the farewell message and exits.
 
-<img alt="img_11.png" height="130" src="img_11.png" width="770"/>
+<img alt="output of farewell message" height="130" src="img_11.png" width="770"/>

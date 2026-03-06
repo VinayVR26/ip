@@ -93,9 +93,8 @@ public class Storage {
      *
      * @param userTaskArrayList The {@code ArrayList} where the {@code Task} objects that were loaded from
      *                          the file, are added to.
-     * @return The total number of tasks loaded from the file.
      */
-    public int loadData(ArrayList<Task> userTaskArrayList) {
+    public void loadData(ArrayList<Task> userTaskArrayList) {
         int numberOfTasks = 0;
         File f = new File(filePath);
         try {
@@ -110,32 +109,33 @@ public class Storage {
                 Task taskToAdd = null;
                 if (taskType.equals("T")) {
                     taskToAdd = new Todo(taskDescription);
+                    taskToAdd.setTaskStatus(isTaskDone);
 
                 } else if (taskType.equals("D")) {
                     String deadlineTaskDate = " " + tokens[INDEX_OF_DEADLINE_TASK_BY_DATE_IN_FILE];
                     taskToAdd = new Deadline(taskDescription, deadlineTaskDate);
+                    taskToAdd.setTaskStatus(isTaskDone);
 
                 } else if (taskType.equals("E")) {
                     String eventTaskFromTime = " " + tokens[INDEX_OF_EVENT_TASK_FROM_TIME_IN_FILE];
                     String eventTaskToTime = " " + tokens[INDEX_OF_EVENT_TASK_TO_TIME_IN_FILE];
                     taskToAdd = new Event(taskDescription, eventTaskFromTime, eventTaskToTime);
+                    taskToAdd.setTaskStatus(isTaskDone);
                 }
 
-                taskToAdd.setTaskStatus(isTaskDone);
                 userTaskArrayList.add(taskToAdd);
                 numberOfTasks = numberOfTasks + 1;
             }
         } catch (FileNotFoundException e) {
             System.err.println("ERROR: File not found");
         }
-        return numberOfTasks;
     }
 
     /**
      * Saves the tasks in {@code userTaskArrayList} to the file.
      * Each {@code Task} object is formatted into a comma-seperated line and then
      * written to the disk.
-     * Exisiting file content in the file is overwritten.
+     * Existing file content in the file is overwritten.
      *
      * @param userTaskArrayList The {@code ArrayList} of {@code Task} objects to be saved.
      */

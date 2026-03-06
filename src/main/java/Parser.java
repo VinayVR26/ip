@@ -97,7 +97,8 @@ public class Parser {
         }
 
         if (!userInput.contains(" /from") && !userInput.contains(" /to")) {
-            throw new TaskHandlerException("ERROR: '/from' and '/to' time for an 'event' task are empty. Please include them.");
+            throw new TaskHandlerException("ERROR: '/from' and '/to' time for an 'event' task are empty. " +
+                    "Please include them.");
         }
 
         if (!userInput.contains(" /from")) {
@@ -136,8 +137,8 @@ public class Parser {
      * Checks for the existence of description and /by date.
      *
      * @param userInput The input string starting with "deadline".
-     * @throws TaskHandlerException If {@code userInput} is invalid input or {@code Deadline} task is missing any of the
-     * two components - description or /by date.
+     * @throws TaskHandlerException If {@code userInput} is invalid input or {@code Deadline} task is missing
+     * any of the two components - description or /by date.
      */
     public static void handleDeadlineTaskValidation(String userInput) throws TaskHandlerException{
         if (userInput.length() >= STARTING_INDEX_OF_DEADLINE_TASK_DESCRIPTION &&
@@ -145,7 +146,8 @@ public class Parser {
             throw new TaskHandlerException("ERROR: Unknown task type. Valid tasks are 'todo', 'event', 'deadline'");
         }
         if (userInput.trim().length() < STARTING_INDEX_OF_DEADLINE_TASK_DESCRIPTION) {
-            throw new TaskHandlerException("ERROR: Description and /by date of a 'deadline' task are empty. Please include them.");
+            throw new TaskHandlerException("ERROR: Description and /by date of a 'deadline' task are empty. " +
+                    "Please include them.");
         }
 
         if (userInput.indexOf("/by") == STARTING_INDEX_OF_DEADLINE_TASK_DESCRIPTION) {

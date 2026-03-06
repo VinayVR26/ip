@@ -102,7 +102,7 @@ public class Ui {
      *
      * @param spacingCount The number of space charatcers ' ' to print.
      */
-    private static void addIndentation(int spacingCount) {
+    private void addIndentation(int spacingCount) {
         for (int i = 0; i < spacingCount; i++) {
             System.out.print(" ");
         }
@@ -115,7 +115,7 @@ public class Ui {
      * @param position The {@code LineLocation} indicating if this line is above or below the
      * message block.
      */
-    public static void drawHorizontalLine(LineLocation position) {
+    public void drawHorizontalLine(LineLocation position) {
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_HORIZONTAL_LINE);
         for (int i = 0; i < MAX_NUMBER_OF_DASHES; i += 1){
             System.out.print("-");
@@ -131,7 +131,7 @@ public class Ui {
     /**
      * Displays the welcome message to the user when the application starts.
      */
-    public static void displayWelcomeMessage() {
+    public void displayWelcomeMessage() {
         drawHorizontalLine(LineLocation.TOP);
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_WELCOME_MESSAGE);
         System.out.println("Hello! I'm TaskHandler");
@@ -146,7 +146,7 @@ public class Ui {
      *
      * @param userTaskArrayList The {@code TaskList} object containing the tasks to be displayed.
      */
-    public static void displayUserDataArray(TaskList userTaskArrayList) {
+    public void displayUserDataArray(TaskList userTaskArrayList) {
         drawHorizontalLine(LineLocation.TOP);
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_EACH_TASK_ADDED);
         System.out.println("Here are the tasks in your list");
@@ -164,7 +164,7 @@ public class Ui {
      *
      * @param taskMarked The {@code Task} object that was marked.
      */
-    public static void displayMarkedSuccessMessage(Task taskMarked) {
+    public void displayMarkedSuccessMessage(Task taskMarked) {
         drawHorizontalLine(LineLocation.TOP);
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_TASK_MARKED_SUCCESS_MESSAGE);
         System.out.println("Nice! I've marked this task as done:");
@@ -179,7 +179,7 @@ public class Ui {
      *
      * @param taskUnmarked The {@code Task} object that was unmarked.
      */
-    public static void displayUnmarkedSuccessMessage(Task taskUnmarked) {
+    public void displayUnmarkedSuccessMessage(Task taskUnmarked) {
         drawHorizontalLine(LineLocation.TOP);
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_TASK_UNMARKED_SUCCESS_MESSAGE);
         System.out.println("OK, I've marked this task as not done yet:");
@@ -195,7 +195,7 @@ public class Ui {
      * @param deletedTask The {@code Task} object that was deleted.
      * @param sizeOfArrayList The number of {@code Task} objects left in the list.
      */
-    public static void displayDeleteSuccessMessage(Task deletedTask, int sizeOfArrayList) {
+    public void displayDeleteSuccessMessage(Task deletedTask, int sizeOfArrayList) {
         drawHorizontalLine(LineLocation.TOP);
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_TASK_DELETE_SUCCESS_MESSAGE);
         System.out.println("Noted. I've removed this task:");
@@ -213,7 +213,7 @@ public class Ui {
      * @param taskObject The {@code Task} object that was added.
      * @param userArrayListSize The number of {@code Task} objects in the list.
      */
-    public static void displayTaskAddedMessage(Task taskObject, int userArrayListSize) {
+    public void displayTaskAddedMessage(Task taskObject, int userArrayListSize) {
         drawHorizontalLine(LineLocation.TOP);
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_TASK_ADDED_SUCCESS_MESSAGE);
         System.out.println("Got it. I've added this task:");
@@ -231,7 +231,7 @@ public class Ui {
      * @param matchingTasksArrayList The object containing {@code Task} objects whose description contains
      *                               the keyword entered by the user.
      */
-    public static void displayMatchignTasksMessage(ArrayList<Task> matchingTasksArrayList) {
+    public void displayMatchignTasksMessage(ArrayList<Task> matchingTasksArrayList) {
         drawHorizontalLine(LineLocation.TOP);
         if (matchingTasksArrayList.isEmpty()) {
             addIndentation(NUMBER_OF_SPACES_TO_INDENT_MATCHING_TASK);
@@ -251,7 +251,7 @@ public class Ui {
     /**
      * Displays the bye message to the user.
      */
-    public static void displayByeMessage() {
+    public void displayByeMessage() {
         drawHorizontalLine(LineLocation.TOP);
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_BYE_MESSAGE);
         System.out.println("I hope I helped you! Bye for now");
@@ -263,7 +263,7 @@ public class Ui {
      *
      * @param errorMessage The actual error message to be displayed.
      */
-    public static void displayErrorMessage(String errorMessage) {
+    public void displayErrorMessage(String errorMessage) {
         addIndentation(NUMBER_OF_SPACES_TO_INDENT_ERROR_MESSAGE);
         System.out.println(errorMessage);
 
