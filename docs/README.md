@@ -74,9 +74,9 @@ displays the task with an [X].
 
 Marks a task in your list as not done.
 
-Format: `mark <task number>`
+Format: `unmark <task number>`
 
-Example: `mark 2`
+Example: `unmark 2`
 
 The application displays a success message that the task has been unmarked as not done and also
 displays the task with a [ ]
